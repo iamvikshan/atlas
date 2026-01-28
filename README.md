@@ -363,7 +363,7 @@ Add an entry to the README's Specialized Subagents section describing when to us
 6. **Delegate appropriately** - Let subagents handle heavy lifting
 
 
-### Adding Custom Agents
+## Adding Custom Agents
 
 You can extend the Atlas and Promethus agents with your own specialized subagents for domain-specific tasks (e.g., database experts, API specialists, security reviewers, etc.).
 
