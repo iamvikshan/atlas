@@ -38,7 +38,7 @@ This repository contains custom agent prompts that work together to handle the c
   - Supports parallel research across independent subsystems
 
 - **Sisyphus-subagent** (`Sisyphus-subagent.agent.md`) - THE IMPLEMENTER
-  - **Model:** Claude Haiku 4.5 (copilot)
+  - **Model:** Claude Sonnet 4.5 (copilot)
   - Executes implementation following strict TDD principles
   - Writes tests first, then minimal code to pass
   - Handles linting and formatting
