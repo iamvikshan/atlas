@@ -1,11 +1,3 @@
-# atlas Architecture Reference
-
-This document is the detailed architecture and contributor reference for the `atlas` plugin.
-
-Use `README.md` for installation, first-run setup, bundled capabilities, and day-to-day usage. Use this document for the system model, routing rules, review loops, memory behavior, and implementation guarantees.
-
----
-
 ## System Model
 
 The system uses a flat conductor-delegate pattern. Two user-facing agents handle interaction and planning. **atlas** directly manages execution by delegating to specialized workers. **prometheus** is also user-facing; Atlas does not delegate to it.
@@ -13,42 +5,44 @@ The system uses a flat conductor-delegate pattern. Two user-facing agents handle
 ```text
 User
   |
+  +---> prometheus (planner)
+  |
   +---> atlas (conductor)
   |      +---> ekko (backend)      -- writes server/logic code
   |      +---> aurora (frontend)   -- writes UI code
   |      +---> forge (infra)       -- writes CI/CD, containers, cloud, monitoring
+  |      +---> nova (data/ml)      -- writes Jupyter notebooks, data analysis
   |      +---> sentry (reviewer)   -- reviews all changes (adversarial)
   |      +---> oracle (researcher) -- gathers context
   |      +---> killua (scout)      -- fast file discovery
   |      +---> metis (validator)   -- validates plans (dual-mode)
-  |
-  +---> prometheus (planner)
 ```
 
 ### User-Facing Agents
 
 | Agent          | File                         | Model                     | Role                                                                                                                                                                                                                                             |
 | -------------- | ---------------------------- | ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| **atlas**      | `agents/atlas.agent.md`      | Claude Opus 4.6 (copilot) | Conductor. Routes tasks via IntentGate, delegates to workers directly, manages review loops, spot-checking, and todos. May apply trivial single-file quick fixes after review by **sentry**. Never writes multi-file code.                       |
+| **atlas** | `agents/atlas.agent.md`      | Claude Opus 4.6 (copilot) | Conductor. Routes tasks via IntentGate, delegates to workers directly, manages review loops, spot-checking, and todos. May apply trivial single-file quick fixes after review by **sentry**. Never writes multi-file code.                       |
 | **prometheus** | `agents/prometheus.agent.md` | Claude Opus 4.6 (copilot) | Planner. Researches requirements, consults **metis** PRE_PLAN, drafts phased plans, validates iteratively with **metis** VALIDATE, then presents the approved plan to the user for manual return to **atlas**. Never writes implementation code. |
 
 ### Subagents
 
 | Agent      | File                     | Model                       | Role                                                                                                      |
 | ---------- | ------------------------ | --------------------------- | --------------------------------------------------------------------------------------------------------- |
-| **ekko**   | `agents/ekko.agent.md`   | Claude Opus 4.6 (copilot)   | Backend/core implementer. Strict TDD, Write-Guard, Comment Discipline, Indistinguishable Code.            |
+| **ekko** | `agents/ekko.agent.md`   | Claude Opus 4.6 (copilot)   | Backend/core implementer. Strict TDD, Write-Guard, Comment Discipline, Indistinguishable Code.            |
 | **aurora** | `agents/aurora.agent.md` | GPT-5.4 (copilot)           | Frontend/UI implementer. TDD, accessibility-first, visual verification, stitch-mcp scaffolding.           |
-| **forge**  | `agents/forge.agent.md`  | Claude Opus 4.6 (copilot)   | DevOps/infra implementer. CI/CD, containers, cloud, monitoring, deployment automation. Security-first.    |
+| **forge** | `agents/forge.agent.md`  | Claude Opus 4.6 (copilot)   | DevOps/infra implementer. CI/CD, containers, cloud, monitoring, deployment automation. Security-first.    |
+| **nova** | `agents/nova.agent.md`   | Claude Opus 4.6 (copilot)   | Data science/analytics implementer. Jupyter notebooks, log analysis, ML, visualizations. Stateful execution.|
 | **sentry** | `agents/sentry.agent.md` | GPT-5.4 (copilot)           | Code reviewer. Adversarial analysis, security, correctness, and requirement validation. Never edits code. |
 | **oracle** | `agents/oracle.agent.md` | Claude Sonnet 4.6 (copilot) | Researcher. Structured findings, convention discovery, external docs, skills recommendations.             |
 | **killua** | `agents/killua.agent.md` | Claude Haiku 4.5 (copilot)  | Scout. Ultra-fast file discovery, dependency mapping, read-only exploration.                              |
-| **metis**  | `agents/metis.agent.md`  | Claude Sonnet 4.6 (copilot) | Plan validator. PRE_PLAN for pre-planning analysis, VALIDATE for plan validation.                         |
+| **metis** | `agents/metis.agent.md`  | Claude Sonnet 4.6 (copilot) | Plan validator. PRE_PLAN for pre-planning analysis, VALIDATE for plan validation.                         |
 
 ### Delegation Rules
 
-- **atlas** delegates to: **ekko**, **aurora**, **forge**, **sentry**, **oracle**, **killua**, **metis**
+- **atlas** delegates to: **ekko**, **aurora**, **forge**, **nova**, **sentry**, **oracle**, **killua**, **metis**
 - **prometheus** delegates to: **oracle**, **killua**, **metis**
-- Planned multi-file implementation is handled exclusively by **ekko**, **aurora**, and **forge**
+- Planned multi-file implementation is handled exclusively by **ekko**, **aurora**, **forge**, and **nova**
 - **sentry** reviews all changes in all modes
 - Category routing is strict and enforced by **atlas**
 
@@ -129,22 +123,31 @@ Because VS Code does not support nested delegation back into another user-facing
 | `visual/UI/frontend/styling` | **aurora** only                                 |
 | `backend/API/database/logic` | **ekko** only                                   |
 | `infra/devops/deployment`    | **forge** only                                  |
-| `full-stack/mixed`           | Sequential: **ekko** first, then **aurora**     |
+| `data/ml/analytics/notebooks`| **nova** only                                   |
+| `full-stack/mixed`           | Sequential: **ekko** first, then **aurora** |
 | `architecture/design`        | **oracle** for analysis, then route to a worker |
 | `documentation/writing`      | **atlas** may handle agent/system docs directly |
 
 If the category is not explicit, **atlas** infers from file types and task wording.
 
+### File-Based Inference
+
+- `.tsx`, `.jsx`, `.css`, `.scss`, `.html`, `.svelte`, `.vue` -> **aurora**
+- `.ts` server, `.py`, `.go`, `.rs`, `.java`, `.sql` -> **ekko**
+- `Dockerfile`, `.yml`/`.yaml` CI, `.tf`, `Helm` -> **forge**
+- `.ipynb`, `.csv`, `.parquet`, data-heavy `.py` -> **nova**
+
 ---
 
 ## Worker Guarantees
 
-All implementation workers (**ekko**, **aurora**, **forge**) follow the same baseline guarantees:
+All implementation workers (**ekko**, **aurora**, **forge**, **nova**) follow the same baseline guarantees:
 
 - **Write-Guard.** Never edit a file without reading it first.
 - **Comment Discipline.** Comments must add value; avoid narrating obvious code.
 - **Indistinguishable Code.** Match repository conventions and avoid AI-shaped code patterns.
 - **No Scope Creep.** Do exactly what the task requires. No bonus refactors or opportunistic rewrites.
+- **The Boy Scout Rule.** Fix pre-existing errors in modified files and resolve any resulting test regressions elsewhere.
 
 ---
 
@@ -158,6 +161,8 @@ Before marking a phase complete, **atlas** verifies:
 - Every planned test was written or updated
 - Quality gates actually ran
 - No `TODO`, `FIXME`, or `HACK` comments remain in modified files
+- Global test suite passes (regressions caught and fixed)
+- Boy Scout rule followed (zero lint/type errors in modified files)
 
 ### Atlas Phase Implementation Loop
 
@@ -177,8 +182,7 @@ In Autopilot mode, **atlas** runs a bounded review loop:
 - Security gaps
 - False claims in worker reports
 - Situations where “zero findings” likely means the review was too shallow
-
-**sentry** can also suggest new hooks when it sees repeated quality issues.
+- Out-of-Scope (OOS) Tech Debt caught by CodeRabbit (logged for future action, not a phase blocker)
 
 ---
 
@@ -228,29 +232,6 @@ To package a reusable workflow:
 #### Design skill family
 
 The bundled `frontend-design` skill and its `design-*` companions are adapted from [impeccable](https://github.com/pbakaus/impeccable) (Apache 2.0). They provide design guidance and the reference material used by **aurora** and **sentry** during UI work. The `/teach-design` skill gathers project-specific design context into `.atlas/design.md`.
-
-The design skill family includes:
-
-- `/frontend-design`
-- `/teach-design`
-- `/design-help`
-- `/design-audit`
-- `/design-polish`
-- `/design-normalize`
-- `/design-harden`
-- `/design-critique`
-- `/design-clarify`
-- `/design-adapt`
-- `/design-optimize`
-- `/design-animate`
-- `/design-extract`
-- `/design-onboard`
-- `/design-colorize`
-- `/design-bolder`
-- `/design-quieter`
-- `/design-arrange`
-- `/design-typeset`
-- `/design-overdrive`
 
 #### forge origin
 
@@ -303,16 +284,18 @@ VS Code's plugin-level `.mcp.json` format does **not** support `inputs` / `promp
 
 ### sequential-thinking Supported-Agent Matrix
 
-| Agent          | Included | Rationale                                                        |
-| -------------- | -------- | ---------------------------------------------------------------- |
-| **atlas**      | Yes      | Planning and architectural routing benefit from structured steps |
-| **prometheus** | Yes      | Multi-phase planning needs explicit reasoning scaffolds          |
-| **metis**      | Yes      | Validation is a multi-constraint task                            |
-| **oracle**     | Yes      | Research often requires tradeoff analysis                        |
-| **sentry**     | Yes      | Adversarial review benefits from systematic reasoning            |
-| **ekko**       | Yes      | Backend architecture and logic often require deeper reasoning    |
-| **aurora**     | No       | UI work is convention-matching rather than reasoning-heavy       |
-| **killua**     | No       | Speed-first scouting would be slowed down by reasoning overhead  |
+| Agent          | Included | Rationale                                                                               |
+| -------------- | -------- | --------------------------------------------------------------------------------------- |
+| **atlas** | Yes      | Planning and architectural routing benefit from structured steps                        |
+| **prometheus** | Yes      | Multi-phase planning needs explicit reasoning scaffolds                                 |
+| **metis** | Yes      | Validation is a multi-constraint task                                                   |
+| **oracle** | Yes      | Research often requires tradeoff analysis                                               |
+| **sentry** | Yes      | Adversarial review benefits from systematic reasoning                                   |
+| **ekko** | Yes      | Backend architecture and logic often require deeper reasoning                           |
+| **nova** | Yes      | Data analysis, modeling choices, and algorithm prototyping require structured reasoning |
+| **aurora** | No       | UI work is convention-matching rather than reasoning-heavy                              |
+| **killua** | No       | Speed-first scouting would be slowed down by reasoning overhead                         |
+| **forge** | Yes      | Infrastructure architecture and tradeoff decisions benefit from structured reasoning    |
 
 Hook scripts are intentionally unchanged for this rollout. Sequential thinking is opt-in per agent file.
 
@@ -334,7 +317,7 @@ When `workbench.browser.enableChatTools` is enabled, agents use built-in browser
 - `clickElement`
 - `readPage`
 - `screenshotPage`
-- `openBrowserPage` / `navigatePage`
+- `openBrowserPage` / `MapsPage`
 
 **aurora** keeps `stitch-mcp/*` as a separate concern for scaffolding, while browser tools are used for verification.
 
@@ -354,9 +337,9 @@ When `workbench.browser.enableChatTools` is enabled, agents use built-in browser
 One living file per task shared by all agents. Replaces the previous per-agent session file model.
 
 - **Atlas** creates the ledger at task start and writes: task name, mode, objective, plan link, and delegation blocks.
-- **Workers** (ekko, aurora, forge) read the full ledger on start and update their own delegation section with brief progress.
+- **Workers** (ekko, aurora, forge, nova) read the full ledger on start and update their own delegation section with brief progress. They note context hints (e.g., expected test failures, data schemas) for parallel workers and Sentry.
 - **Prometheus** reads the ledger for atlas-prepared context and updates its own section with plan location.
-- **Reviewers** (sentry, metis) read the task objective and their review delegation section. They do not write to the ledger.
+- **Reviewers** (sentry, metis) read the task objective, their review delegation section, and parallel notes. They do not write to the ledger.
 - **Read-only agents** (oracle, killua) read relevant ledger sections for context. They do not write to the ledger.
 - Atlas deletes the ledger during the final completion/archive flow.
 
