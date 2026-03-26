@@ -22,21 +22,21 @@ User
 
 | Agent          | File                         | Model                     | Role                                                                                                                                                                                                                                             |
 | -------------- | ---------------------------- | ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| **atlas** | `agents/atlas.agent.md`      | Claude Opus 4.6 (copilot) | Conductor. Routes tasks via IntentGate, delegates to workers directly, manages review loops, spot-checking, and todos. May apply trivial single-file quick fixes after review by **sentry**. Never writes multi-file code.                       |
+| **atlas**      | `agents/atlas.agent.md`      | Claude Opus 4.6 (copilot) | Conductor. Routes tasks via IntentGate, delegates to workers directly, manages review loops, spot-checking, and todos. May apply trivial single-file quick fixes after review by **sentry**. Never writes multi-file code.                       |
 | **prometheus** | `agents/prometheus.agent.md` | Claude Opus 4.6 (copilot) | Planner. Researches requirements, consults **metis** PRE_PLAN, drafts phased plans, validates iteratively with **metis** VALIDATE, then presents the approved plan to the user for manual return to **atlas**. Never writes implementation code. |
 
 ### Subagents
 
-| Agent      | File                     | Model                       | Role                                                                                                      |
-| ---------- | ------------------------ | --------------------------- | --------------------------------------------------------------------------------------------------------- |
-| **ekko** | `agents/ekko.agent.md`   | Claude Opus 4.6 (copilot)   | Backend/core implementer. Strict TDD, Write-Guard, Comment Discipline, Indistinguishable Code.            |
-| **aurora** | `agents/aurora.agent.md` | GPT-5.4 (copilot)           | Frontend/UI implementer. TDD, accessibility-first, visual verification, stitch-mcp scaffolding.           |
-| **forge** | `agents/forge.agent.md`  | Claude Opus 4.6 (copilot)   | DevOps/infra implementer. CI/CD, containers, cloud, monitoring, deployment automation. Security-first.    |
-| **nova** | `agents/nova.agent.md`   | Claude Opus 4.6 (copilot)   | Data science/analytics implementer. Jupyter notebooks, log analysis, ML, visualizations. Stateful execution.|
-| **sentry** | `agents/sentry.agent.md` | GPT-5.4 (copilot)           | Code reviewer. Adversarial analysis, security, correctness, and requirement validation. Never edits code. |
-| **oracle** | `agents/oracle.agent.md` | Claude Sonnet 4.6 (copilot) | Researcher. Structured findings, convention discovery, external docs, skills recommendations.             |
-| **killua** | `agents/killua.agent.md` | Claude Haiku 4.5 (copilot)  | Scout. Ultra-fast file discovery, dependency mapping, read-only exploration.                              |
-| **metis** | `agents/metis.agent.md`  | Claude Sonnet 4.6 (copilot) | Plan validator. PRE_PLAN for pre-planning analysis, VALIDATE for plan validation.                         |
+| Agent      | File                     | Model                       | Role                                                                                                         |
+| ---------- | ------------------------ | --------------------------- | ------------------------------------------------------------------------------------------------------------ |
+| **ekko**   | `agents/ekko.agent.md`   | Claude Opus 4.6 (copilot)   | Backend/core implementer. Strict TDD, Write-Guard, Comment Discipline, Indistinguishable Code.               |
+| **aurora** | `agents/aurora.agent.md` | GPT-5.4 (copilot)           | Frontend/UI implementer. TDD, accessibility-first, visual verification, stitch-mcp scaffolding.              |
+| **forge**  | `agents/forge.agent.md`  | Claude Opus 4.6 (copilot)   | DevOps/infra implementer. CI/CD, containers, cloud, monitoring, deployment automation. Security-first.       |
+| **nova**   | `agents/nova.agent.md`   | Claude Opus 4.6 (copilot)   | Data science/analytics implementer. Jupyter notebooks, log analysis, ML, visualizations. Stateful execution. |
+| **sentry** | `agents/sentry.agent.md` | GPT-5.4 (copilot)           | Code reviewer. Adversarial analysis, security, correctness, and requirement validation. Never edits code.    |
+| **oracle** | `agents/oracle.agent.md` | Claude Sonnet 4.6 (copilot) | Researcher. Structured findings, convention discovery, external docs, skills recommendations.                |
+| **killua** | `agents/killua.agent.md` | Claude Haiku 4.5 (copilot)  | Scout. Ultra-fast file discovery, dependency mapping, read-only exploration.                                 |
+| **metis**  | `agents/metis.agent.md`  | Claude Sonnet 4.6 (copilot) | Plan validator. PRE_PLAN for pre-planning analysis, VALIDATE for plan validation.                            |
 
 ### Delegation Rules
 
@@ -109,7 +109,7 @@ If validation fails, the plan enters a revision loop. If it fails repeatedly, th
 Because VS Code does not support nested delegation back into another user-facing agent, **atlas** never invokes **prometheus** directly.
 
 - In **Normal mode**, **atlas** asks the user whether deep planning with **prometheus** is needed. If the user accepts, **atlas** writes a prometheus delegation section in the session ledger and gives the user a copyable prompt for `@prometheus`. If the user declines, **atlas** self-plans with its Metis validation loop.
-- **prometheus** reads the ledger context if present, performs research and validation, writes the plan, updates its ledger section, and ends with a copyable prompt for the user to paste back into `@atlas`.
+- **prometheus** reads the ledger context if present, performs research and validation, writes the plan, updates its ledger section, and ends with a copyable prompt for the user to paste back into `atlas`.
 - In **ULW/YOLO mode**, **atlas** keeps planning in-process and runs its own Metis validation loop instead of routing to **prometheus**.
 
 ---
@@ -118,15 +118,15 @@ Because VS Code does not support nested delegation back into another user-facing
 
 ### Strict Category Routing
 
-| Category                     | Worker Routing                                  |
-| ---------------------------- | ----------------------------------------------- |
-| `visual/UI/frontend/styling` | **aurora** only                                 |
-| `backend/API/database/logic` | **ekko** only                                   |
-| `infra/devops/deployment`    | **forge** only                                  |
-| `data/ml/analytics/notebooks`| **nova** only                                   |
-| `full-stack/mixed`           | Sequential: **ekko** first, then **aurora** |
-| `architecture/design`        | **oracle** for analysis, then route to a worker |
-| `documentation/writing`      | **atlas** may handle agent/system docs directly |
+| Category                      | Worker Routing                                  |
+| ----------------------------- | ----------------------------------------------- |
+| `visual/UI/frontend/styling`  | **aurora** only                                 |
+| `backend/API/database/logic`  | **ekko** only                                   |
+| `infra/devops/deployment`     | **forge** only                                  |
+| `data/ml/analytics/notebooks` | **nova** only                                   |
+| `full-stack/mixed`            | Sequential: **ekko** first, then **aurora**     |
+| `architecture/design`         | **oracle** for analysis, then route to a worker |
+| `documentation/writing`       | **atlas** may handle agent/system docs directly |
 
 If the category is not explicit, **atlas** infers from file types and task wording.
 
@@ -286,16 +286,16 @@ VS Code's plugin-level `.mcp.json` format does **not** support `inputs` / `promp
 
 | Agent          | Included | Rationale                                                                               |
 | -------------- | -------- | --------------------------------------------------------------------------------------- |
-| **atlas** | Yes      | Planning and architectural routing benefit from structured steps                        |
+| **atlas**      | Yes      | Planning and architectural routing benefit from structured steps                        |
 | **prometheus** | Yes      | Multi-phase planning needs explicit reasoning scaffolds                                 |
-| **metis** | Yes      | Validation is a multi-constraint task                                                   |
-| **oracle** | Yes      | Research often requires tradeoff analysis                                               |
-| **sentry** | Yes      | Adversarial review benefits from systematic reasoning                                   |
-| **ekko** | Yes      | Backend architecture and logic often require deeper reasoning                           |
-| **nova** | Yes      | Data analysis, modeling choices, and algorithm prototyping require structured reasoning |
-| **aurora** | No       | UI work is convention-matching rather than reasoning-heavy                              |
-| **killua** | No       | Speed-first scouting would be slowed down by reasoning overhead                         |
-| **forge** | Yes      | Infrastructure architecture and tradeoff decisions benefit from structured reasoning    |
+| **metis**      | Yes      | Validation is a multi-constraint task                                                   |
+| **oracle**     | Yes      | Research often requires tradeoff analysis                                               |
+| **sentry**     | Yes      | Adversarial review benefits from systematic reasoning                                   |
+| **ekko**       | Yes      | Backend architecture and logic often require deeper reasoning                           |
+| **nova**       | Yes      | Data analysis, modeling choices, and algorithm prototyping require structured reasoning |
+| **aurora**     | No       | UI work is convention-matching rather than reasoning-heavy                              |
+| **killua**     | No       | Speed-first scouting would be slowed down by reasoning overhead                         |
+| **forge**      | Yes      | Infrastructure architecture and tradeoff decisions benefit from structured reasoning    |
 
 Hook scripts are intentionally unchanged for this rollout. Sequential thinking is opt-in per agent file.
 
