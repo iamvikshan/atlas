@@ -233,6 +233,28 @@ To package a reusable workflow:
 
 The bundled `frontend-design` skill and its `design-*` companions are adapted from [impeccable](https://github.com/pbakaus/impeccable) (Apache 2.0). They provide design guidance and the reference material used by **aurora** and **sentry** during UI work. The `/teach-design` skill gathers project-specific design context into `.atlas/design.md`.
 
+Canonical design commands:
+
+- `/design-adapt`
+- `/design-animate`
+- `/design-arrange`
+- `/design-audit`
+- `/design-bolder`
+- `/design-clarify`
+- `/design-colorize`
+- `/design-critique`
+- `/design-extract`
+- `/design-harden`
+- `/design-help`
+- `/design-normalize`
+- `/design-onboard`
+- `/design-optimize`
+- `/design-overdrive`
+- `/design-polish`
+- `/design-quieter`
+- `/design-typeset`
+- `/frontend-design`
+
 #### forge origin
 
 **forge** is derived from the [agency-agents](https://github.com/msitarzewski/agency-agents) DevOps Automator pattern and handles CI/CD, containerization, cloud infrastructure, monitoring, and deployment automation.

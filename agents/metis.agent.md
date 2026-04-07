@@ -2,18 +2,7 @@
 name: 'metis'
 description: 'Plan validator -- checks feasibility, scope, dependencies, and quality gates before implementation'
 tools:
-  [
-    vscode/memory,
-    vscode/extensions,
-    read,
-    search,
-    web,
-    'github/*',
-    'sequential-thinking/*',
-    'context7/*',
-    'exa/*',
-    'tavily/*',
-  ]
+  [vscode/memory, read, search, web, 'github/*', 'sequential-thinking/*', 'context7/*', 'exa/*', 'tavily/*']
 model: GPT-5.4 mini (copilot)
 user-invocable: false
 ---

@@ -6,11 +6,15 @@ disable-model-invocation: true
 tools:
   [
     vscode/memory,
-    vscode/extensions,
     vscode/askQuestions,
+    execute/getTerminalOutput,
+    execute/runInTerminal,
     read,
     agent,
-    edit,
+    edit/createDirectory,
+    edit/createFile,
+    edit/editFiles,
+    edit/rename,
     search,
     web,
     'github/*',
@@ -18,6 +22,7 @@ tools:
     'context7/*',
     'exa/*',
     'tavily/*',
+    browser,
     vscode.mermaid-chat-features/renderMermaidDiagram,
     todo,
   ]

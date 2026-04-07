@@ -5,7 +5,6 @@ tools:
   [
     vscode/memory,
     execute/getTerminalOutput,
-    execute/awaitTerminal,
     execute/killTerminal,
     execute/createAndRunTask,
     execute/runInTerminal,
@@ -70,6 +69,7 @@ For every file in `files_modified`, evaluate:
 3. **Security (OWASP Top 10):** Injection, SSRF, broken auth, plaintext secrets. (Any security flaw is automatically **MAJOR**).
 4. **Quality:** Code hygiene, naming, comment density (<30%). Does it match existing `/memories/repo/*.json` conventions?
 5. **UI/Design Validation (Visual tasks only):** Check for AI design anti-patterns (generic fonts, bad contrast, missing typographic hierarchy). Verify they used the required workflow skills (`/frontend-design`, `/design-audit`, `/design-normalize`). Check for invocation evidence in logs/metadata.
+   Recognized design skills are any slash command matching `/design-*` plus `/frontend-design`; use the canonical command inventory in `docs/ARCHITECTURE.md`.
 6. **Adversarial Analysis:** Identify the worker's core assumptions. What is the failure mode if they are wrong?
 7. **Reinvention Check:** Did they build a custom utility when a standard library/package exists? (Use `context7/*`, `tavily/*` or `exa/*` to verify). Flag as **MAJOR** if an existing package covers >=80% of the use case.
 8. **The Boy Scout & Regression Check:** Did the worker leave pre-existing lint/type errors in the files they modified? Did their changes break previously passing tests elsewhere? (Any regression or ignored error in a touched file is a **MAJOR** issue).

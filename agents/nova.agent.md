@@ -6,7 +6,6 @@ tools:
     vscode/memory,
     vscode/extensions,
     execute/getTerminalOutput,
-    execute/awaitTerminal,
     execute/killTerminal,
     execute/createAndRunTask,
     execute/runInTerminal,

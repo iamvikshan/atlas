@@ -5,7 +5,6 @@ tools:
   [
     vscode/memory,
     execute/getTerminalOutput,
-    execute/awaitTerminal,
     execute/killTerminal,
     execute/createAndRunTask,
     execute/runInTerminal,
@@ -77,7 +76,7 @@ Execute these steps strictly in order:
 Run bundled design slash commands to ensure production quality:
 
 1. Run `/design-audit` -> `/design-normalize` -> `/design-harden` -> `/design-polish`.
-2. Apply advisory skills (e.g., `/design-responsive`, `/design-animate`) if the task specifically calls for them.
+2. Recognized design skills are any slash command matching `/design-*` plus `/frontend-design`. Apply the relevant ones when the task specifically calls for them.
 
 ### Step 5: Visual Verification & Dev Server Management
 
@@ -93,7 +92,7 @@ netstat -ano | findstr /R /C:":3000 .*LISTENING" /C:":5173 .*LISTENING" /C:":808
 ```
 
 - **If running:** Note the port. Do NOT launch a new one.
-- **If not running:** Launch via background terminal (`isBackground: true`). Wait for compilation #tool:execute/awaitTerminal
+- **If not running:** Launch the dev server using #tool:execute/runInTerminal (`isBackground: true`) or #tool:execute/createAndRunTask (`isBackground: true`).
 - **Cleanup:** Kill ANY terminal you spawned using #tool:execute/killTerminal Do NOT kill pre-existing servers.
 
 ### Step 6: Quality Gates

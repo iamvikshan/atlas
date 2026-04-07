@@ -8,7 +8,6 @@ tools:
     vscode/extensions,
     vscode/askQuestions,
     execute/getTerminalOutput,
-    execute/awaitTerminal,
     execute/killTerminal,
     execute/createAndRunTask,
     execute/runInTerminal,
@@ -34,7 +33,7 @@ tools:
   ]
 agents:
   ['sentry', 'metis', 'oracle', 'killua', 'ekko', 'aurora', 'forge', 'nova']
-model: Claude Opus 4.6 (copilot)
+model: GPT-5.4 (copilot)
 # handoffs:
 #   - label: 'Plan with prometheus'
 #     agent: prometheus
@@ -167,7 +166,7 @@ Execute iterations based on task complexity. If rejected after max cycles: Ask U
 **Prometheus Handoff (Normal Mode):**
 
 1. If user accepts Prometheus planning: Write delegation section in session ledger.
-2. Present a copyable prompt for the user to paste into **prometheus**.
+2. Present a copyable(codefenced) prompt for the user to paste into **prometheus**.
 3. **Do NOT** delegate to **prometheus** yourself. Wait for user to return the plan.
 
 ### 4. Phase Implementation Loop (Asynchronous Scatter-Gather) (max 5 iterations)
