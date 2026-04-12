@@ -202,16 +202,19 @@ Hooks are shipped via `hooks/quality.json` and cover the agent lifecycle.
 | subagent-start  | SubagentStart    | `subagent-start.sh`  | Injects role-specific rules into subagents               |
 | session-stop    | Stop             | `session-stop.sh`    | Warns on uncommitted changes and temp artifacts          |
 
+Each `.sh` script has an equivalent `.ps1` in `scripts/hooks/` for Windows. The `windows` launcher entries in `hooks/quality.json` resolve and invoke the `.ps1` versions via PowerShell.
+
 ### Scope and Portability
 
 - PreToolUse/PostToolUse hooks fire for the active agent's own tool calls
 - Subagent edits are not covered the same way; workers enforce these rules proactively
-- On plugin install, relative paths resolve automatically from `hooks/quality.json`
+- macOS and Linux run Bash (`*.sh`); Windows runs PowerShell (`*.ps1`) via the `windows` launcher keys in `hooks/quality.json`
+- Plugin hooks still require manual `chat.hookFilesLocations` registration while VS Code agent plugins remain in preview; once registered, the OS-specific launcher keys in `hooks/quality.json` resolve the Bash and PowerShell hook scripts
 - For per-project use, copy the hook config into `.github/hooks/quality.json` and copy `scripts/hooks/` into the target repo
 
 ### Creating New Hooks
 
-Use `/create-hook` to add project-specific lifecycle checks. Hook scripts in `scripts/hooks/` follow a consistent `set -euo pipefail` shell pattern with jq-based parsing and graceful degradation if jq is unavailable.
+Use `/create-hook` to add project-specific lifecycle checks. Bash hook scripts follow a `set -euo pipefail` pattern with `jq`-based parsing and graceful degradation if `jq` is unavailable. Each Bash hook must have a `.ps1` counterpart in `scripts/hooks/` so the `windows` launchers in `hooks/quality.json` have a valid target.
 
 ---
 

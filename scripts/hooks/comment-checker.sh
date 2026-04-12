@@ -53,6 +53,8 @@ while IFS= read -r line || [[ -n "$line" ]]; do
     COMMENT_LINES=$((COMMENT_LINES + 1))
     if [[ "$trimmed" == *"*/" ]]; then
       IN_BLOCK_COMMENT=false
+    elif [[ "$EXT" == "ps1" && "$trimmed" == *"#>" ]]; then
+      IN_BLOCK_COMMENT=false
     fi
     continue
   fi
@@ -101,6 +103,15 @@ while IFS= read -r line || [[ -n "$line" ]]; do
       ;;
     html|xml|svg|vue)
       if [[ "$trimmed" == "<!--"* ]]; then
+        COMMENT_LINES=$((COMMENT_LINES + 1))
+      fi
+      ;;
+    ps1)
+      if [[ "$trimmed" == "<#"* ]]; then
+        COMMENT_LINES=$((COMMENT_LINES + 1))
+        [[ "$trimmed" != *"#>" ]] && IN_BLOCK_COMMENT=true
+      elif [[ "$trimmed" == "#"* ]]; then
+        [[ "$trimmed" =~ ^#[[:space:]]*(Requires|region|endregion) ]] && continue
         COMMENT_LINES=$((COMMENT_LINES + 1))
       fi
       ;;

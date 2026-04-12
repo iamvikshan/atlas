@@ -12,7 +12,7 @@
 # Safe to run multiple times (idempotent).
 #
 # Usage:
-#   ./git.sh [--repo <repository-url>] [--force|--yes]
+#   ./author.sh [--repo <repository-url>] [--force|--yes]
 #
 # Options:
 #   --repo <url>       Override the target repository URL (default: https://github.com/iamvikshan/atlas)
@@ -22,9 +22,9 @@
 #   TARGET_REPO    Set this to override the default target repository URL
 #
 # Examples:
-#   ./git.sh
-#   ./git.sh --repo https://github.com/myorg/myrepo.git
-#   TARGET_REPO=https://github.com/myorg/myrepo.git ./git.sh
+#   ./author.sh
+#   ./author.sh --repo https://github.com/myorg/myrepo.git
+#   TARGET_REPO=https://github.com/myorg/myrepo.git ./author.sh
 
 set -euo pipefail
 
@@ -261,10 +261,10 @@ check_dev_setup() {
     if [[ -z "$gh_user" || "$gh_user" != "GIT_USER_PLACEHOLDER" ]]; then
         if [[ -n "$GITHUB_TOKEN" ]]; then
             echo "⚠️  GitHub CLI is using existing GITHUB_TOKEN, not GIT_USER_PLACEHOLDER"
-            echo "   Run: ./git.sh to authenticate as GIT_USER_PLACEHOLDER"
+            echo "   Run: ./author.sh to authenticate as GIT_USER_PLACEHOLDER"
         else
             echo "⚠️  GitHub CLI is not authenticated as GIT_USER_PLACEHOLDER"
-            echo "   Run: ./git.sh to authenticate"
+            echo "   Run: ./author.sh to authenticate"
         fi
         return 1
     fi
@@ -535,12 +535,8 @@ if [[ "$HAS_SIGNING_SCOPE" != "true" ]]; then
 fi
 
 # Use consistent key name for reuse across environments
-SIGNING_KEY_PATH="$HOME/.ssh/id_ed25519_signing"
+SIGNING_KEY_PATH="$HOME/.ssh/atlas-id_ed25519_signing"
 SIGNING_KEY_PUB="$SIGNING_KEY_PATH.pub"
-
-# Normalize the public key to the canonical "type base64" form used by GitHub's
-# SSH signing key API. Public key files often include a trailing comment.
-NORMALIZED_SIGNING_KEY=$(awk '{print $1 " " $2}' "$SIGNING_KEY_PUB" 2>/dev/null || echo "")
 
 remote_signing_key_exists() {
   local normalized_key="$1"
@@ -569,7 +565,7 @@ else
   #         where interactive passphrase entry is not practical.
   # Implications:
   #   - The private key is protected only by filesystem permissions
-  #   - Anyone with read access to ~/.ssh/id_ed25519_signing can use it
+  #   - Anyone with read access to ~/.ssh/atlas-id_ed25519_signing can use it
   # For production/high-security environments:
   #   - Consider using a passphrase and ssh-agent for key caching
   #   - Or use hardware security keys (e.g., YubiKey)
@@ -580,6 +576,10 @@ else
   ssh-keygen -t ed25519 -C "$GIT_EMAIL" -f "$SIGNING_KEY_PATH" -N "" -q
   echo "✓ SSH signing key generated: $SIGNING_KEY_PATH"
 fi
+
+# Normalize the public key to the canonical "type base64" form used by GitHub's
+# SSH signing key API. Public key files often include a trailing comment.
+NORMALIZED_SIGNING_KEY=$(awk '{print $1 " " $2}' "$SIGNING_KEY_PUB" 2>/dev/null || echo "")
 
 # Check if this key is already on GitHub and add if needed
 # Skip GitHub upload if we know the token lacks write scope (it will fail anyway)
@@ -601,7 +601,7 @@ else
       # Try to create the key through the documented REST API.
       # NOTE: Defensive '|| ADD_EXIT_CODE=$?' pattern prevents 'set -e' from killing the script.
       ADD_EXIT_CODE=0
-      ADD_OUTPUT=$(gh api -X POST /user/ssh_signing_keys -f key="$NORMALIZED_SIGNING_KEY" -f title="$GIT_USER signing key" 2>&1) || ADD_EXIT_CODE=$?
+      ADD_OUTPUT=$(gh api -X POST /user/ssh_signing_keys -f key="$NORMALIZED_SIGNING_KEY" -f title="atlas-$GIT_USER signing key" 2>&1) || ADD_EXIT_CODE=$?
 
       if [[ $ADD_EXIT_CODE -eq 0 ]]; then
         echo "✓ SSH signing key added to GitHub"

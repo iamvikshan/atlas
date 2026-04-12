@@ -83,19 +83,39 @@ check_file_matches_canonical_set() {
   return 0
 }
 
-check_docs_and_agent_lists_match_canonical_set() {
-  local assertion="command-sync-docs-and-agent-lists-match-canonical-set"
+check_docs_match_canonical_set() {
+  local assertion="command-sync-docs-match-canonical-set"
   local problems=()
   local files=(
     "README.md"
     "docs/ARCHITECTURE.md"
-    "agents/aurora.agent.md"
-    "agents/sentry.agent.md"
   )
 
   for rel in "${files[@]}"; do
     if ! detail="$(check_file_matches_canonical_set "${rel}")"; then
       problems+=("${detail}")
+    fi
+  done
+
+  if [[ ${#problems[@]} -eq 0 ]]; then
+    report_pass "${assertion}"
+  else
+    report_fail "${assertion}" "${problems[@]}"
+  fi
+}
+
+check_agent_reference_sentence() {
+  local assertion="command-sync-agent-reference-sentence"
+  local fragment="Recognized design skills are any slash command matching"
+  local problems=()
+  local files=(
+    "agents/aurora.agent.md"
+    "agents/sentry.agent.md"
+  )
+
+  for rel in "${files[@]}"; do
+    if ! grep -qF "${fragment}" "${ROOT_DIR}/${rel}"; then
+      problems+=("${rel} missing reference sentence fragment: ${fragment}")
     fi
   done
 
@@ -133,8 +153,6 @@ check_no_nonexistent_command_references() {
   local files=(
     "README.md"
     "docs/ARCHITECTURE.md"
-    "agents/aurora.agent.md"
-    "agents/sentry.agent.md"
     "skills/design-critique/SKILL.md"
     "skills/design-help/SKILL.md"
   )
@@ -168,7 +186,8 @@ else
   report_pass "command-sync-canonical-command-set-is-non-empty"
 fi
 
-check_docs_and_agent_lists_match_canonical_set
+check_docs_match_canonical_set
+check_agent_reference_sentence
 check_design_critique_list_matches_canonical_set
 check_design_help_map_matches_canonical_set
 check_no_nonexistent_command_references

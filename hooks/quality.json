@@ -6,6 +6,7 @@
         "command": "./scripts/hooks/session-start.sh",
         "osx": "for d in \"$HOME/Library/Application Support/Code - Insiders\" \"$HOME/Library/Application Support/Code\"; do f=\"$d/agentPlugins/github.com/iamvikshan/atlas/scripts/hooks/session-start.sh\"; [ -f \"$f\" ] && exec bash \"$f\"; done; [ -f \"./scripts/hooks/session-start.sh\" ] && exec bash \"./scripts/hooks/session-start.sh\"; echo \"atlas: session-start hook not found\" >&2; exit 1",
         "linux": "for d in \"$HOME/.vscode-server-insiders\" \"$HOME/.vscode-server\" \"$HOME/.config/Code - Insiders\" \"$HOME/.config/Code\" \"$HOME/.vscode-remote\"; do f=\"$d/agentPlugins/github.com/iamvikshan/atlas/scripts/hooks/session-start.sh\"; [ -f \"$f\" ] && exec bash \"$f\"; done; [ -f \"./scripts/hooks/session-start.sh\" ] && exec bash \"./scripts/hooks/session-start.sh\"; echo \"atlas: session-start hook not found\" >&2; exit 1",
+        "windows": "powershell -NonInteractive -NoProfile -Command \"$c=(@('Code - Insiders','Code')|%{$env:APPDATA+'\\\\'+$_+'\\\\agentPlugins\\\\github.com\\\\iamvikshan\\\\atlas\\\\scripts\\\\hooks\\\\session-start.ps1'})+@('.\\\\scripts\\\\hooks\\\\session-start.ps1');$f=$c|?{Test-Path $_}|Select-Object -First 1;if(-not $f){[Console]::Error.WriteLine('atlas: session-start hook not found');exit 1};& $f\"",
         "timeout": 10
       }
     ],
@@ -15,6 +16,7 @@
         "command": "./scripts/hooks/prompt-submit.sh",
         "osx": "for d in \"$HOME/Library/Application Support/Code - Insiders\" \"$HOME/Library/Application Support/Code\"; do f=\"$d/agentPlugins/github.com/iamvikshan/atlas/scripts/hooks/prompt-submit.sh\"; [ -f \"$f\" ] && exec bash \"$f\"; done; [ -f \"./scripts/hooks/prompt-submit.sh\" ] && exec bash \"./scripts/hooks/prompt-submit.sh\"; echo \"atlas: prompt-submit hook not found\" >&2; exit 1",
         "linux": "for d in \"$HOME/.vscode-server-insiders\" \"$HOME/.vscode-server\" \"$HOME/.config/Code - Insiders\" \"$HOME/.config/Code\" \"$HOME/.vscode-remote\"; do f=\"$d/agentPlugins/github.com/iamvikshan/atlas/scripts/hooks/prompt-submit.sh\"; [ -f \"$f\" ] && exec bash \"$f\"; done; [ -f \"./scripts/hooks/prompt-submit.sh\" ] && exec bash \"./scripts/hooks/prompt-submit.sh\"; echo \"atlas: prompt-submit hook not found\" >&2; exit 1",
+        "windows": "powershell -NonInteractive -NoProfile -Command \"$c=(@('Code - Insiders','Code')|%{$env:APPDATA+'\\\\'+$_+'\\\\agentPlugins\\\\github.com\\\\iamvikshan\\\\atlas\\\\scripts\\\\hooks\\\\prompt-submit.ps1'})+@('.\\\\scripts\\\\hooks\\\\prompt-submit.ps1');$f=$c|?{Test-Path $_}|Select-Object -First 1;if(-not $f){[Console]::Error.WriteLine('atlas: prompt-submit hook not found');exit 1};& $f\"",
         "timeout": 5
       }
     ],
@@ -24,6 +26,7 @@
         "command": "./scripts/hooks/write-guard.sh",
         "osx": "for d in \"$HOME/Library/Application Support/Code - Insiders\" \"$HOME/Library/Application Support/Code\"; do f=\"$d/agentPlugins/github.com/iamvikshan/atlas/scripts/hooks/write-guard.sh\"; [ -f \"$f\" ] && exec bash \"$f\"; done; [ -f \"./scripts/hooks/write-guard.sh\" ] && exec bash \"./scripts/hooks/write-guard.sh\"; echo \"atlas: write-guard hook not found\" >&2; exit 1",
         "linux": "for d in \"$HOME/.vscode-server-insiders\" \"$HOME/.vscode-server\" \"$HOME/.config/Code - Insiders\" \"$HOME/.config/Code\" \"$HOME/.vscode-remote\"; do f=\"$d/agentPlugins/github.com/iamvikshan/atlas/scripts/hooks/write-guard.sh\"; [ -f \"$f\" ] && exec bash \"$f\"; done; [ -f \"./scripts/hooks/write-guard.sh\" ] && exec bash \"./scripts/hooks/write-guard.sh\"; echo \"atlas: write-guard hook not found\" >&2; exit 1",
+        "windows": "powershell -NonInteractive -NoProfile -Command \"$c=(@('Code - Insiders','Code')|%{$env:APPDATA+'\\\\'+$_+'\\\\agentPlugins\\\\github.com\\\\iamvikshan\\\\atlas\\\\scripts\\\\hooks\\\\write-guard.ps1'})+@('.\\\\scripts\\\\hooks\\\\write-guard.ps1');$f=$c|?{Test-Path $_}|Select-Object -First 1;if(-not $f){[Console]::Error.WriteLine('atlas: write-guard hook not found');exit 1};& $f\"",
         "timeout": 10
       }
     ],
@@ -33,6 +36,7 @@
         "command": "./scripts/hooks/comment-checker.sh",
         "osx": "for d in \"$HOME/Library/Application Support/Code - Insiders\" \"$HOME/Library/Application Support/Code\"; do f=\"$d/agentPlugins/github.com/iamvikshan/atlas/scripts/hooks/comment-checker.sh\"; [ -f \"$f\" ] && exec bash \"$f\"; done; [ -f \"./scripts/hooks/comment-checker.sh\" ] && exec bash \"./scripts/hooks/comment-checker.sh\"; echo \"atlas: comment-checker hook not found\" >&2; exit 1",
         "linux": "for d in \"$HOME/.vscode-server-insiders\" \"$HOME/.vscode-server\" \"$HOME/.config/Code - Insiders\" \"$HOME/.config/Code\" \"$HOME/.vscode-remote\"; do f=\"$d/agentPlugins/github.com/iamvikshan/atlas/scripts/hooks/comment-checker.sh\"; [ -f \"$f\" ] && exec bash \"$f\"; done; [ -f \"./scripts/hooks/comment-checker.sh\" ] && exec bash \"./scripts/hooks/comment-checker.sh\"; echo \"atlas: comment-checker hook not found\" >&2; exit 1",
+        "windows": "powershell -NonInteractive -NoProfile -Command \"$c=(@('Code - Insiders','Code')|%{$env:APPDATA+'\\\\'+$_+'\\\\agentPlugins\\\\github.com\\\\iamvikshan\\\\atlas\\\\scripts\\\\hooks\\\\comment-checker.ps1'})+@('.\\\\scripts\\\\hooks\\\\comment-checker.ps1');$f=$c|?{Test-Path $_}|Select-Object -First 1;if(-not $f){[Console]::Error.WriteLine('atlas: comment-checker hook not found');exit 1};& $f\"",
         "timeout": 15
       }
     ],
@@ -42,6 +46,7 @@
         "command": "./scripts/hooks/pre-compact.sh",
         "osx": "for d in \"$HOME/Library/Application Support/Code - Insiders\" \"$HOME/Library/Application Support/Code\"; do f=\"$d/agentPlugins/github.com/iamvikshan/atlas/scripts/hooks/pre-compact.sh\"; [ -f \"$f\" ] && exec bash \"$f\"; done; [ -f \"./scripts/hooks/pre-compact.sh\" ] && exec bash \"./scripts/hooks/pre-compact.sh\"; echo \"atlas: pre-compact hook not found\" >&2; exit 1",
         "linux": "for d in \"$HOME/.vscode-server-insiders\" \"$HOME/.vscode-server\" \"$HOME/.config/Code - Insiders\" \"$HOME/.config/Code\" \"$HOME/.vscode-remote\"; do f=\"$d/agentPlugins/github.com/iamvikshan/atlas/scripts/hooks/pre-compact.sh\"; [ -f \"$f\" ] && exec bash \"$f\"; done; [ -f \"./scripts/hooks/pre-compact.sh\" ] && exec bash \"./scripts/hooks/pre-compact.sh\"; echo \"atlas: pre-compact hook not found\" >&2; exit 1",
+        "windows": "powershell -NonInteractive -NoProfile -Command \"$c=(@('Code - Insiders','Code')|%{$env:APPDATA+'\\\\'+$_+'\\\\agentPlugins\\\\github.com\\\\iamvikshan\\\\atlas\\\\scripts\\\\hooks\\\\pre-compact.ps1'})+@('.\\\\scripts\\\\hooks\\\\pre-compact.ps1');$f=$c|?{Test-Path $_}|Select-Object -First 1;if(-not $f){[Console]::Error.WriteLine('atlas: pre-compact hook not found');exit 1};& $f\"",
         "timeout": 10
       }
     ],
@@ -51,6 +56,7 @@
         "command": "./scripts/hooks/subagent-start.sh",
         "osx": "for d in \"$HOME/Library/Application Support/Code - Insiders\" \"$HOME/Library/Application Support/Code\"; do f=\"$d/agentPlugins/github.com/iamvikshan/atlas/scripts/hooks/subagent-start.sh\"; [ -f \"$f\" ] && exec bash \"$f\"; done; [ -f \"./scripts/hooks/subagent-start.sh\" ] && exec bash \"./scripts/hooks/subagent-start.sh\"; echo \"atlas: subagent-start hook not found\" >&2; exit 1",
         "linux": "for d in \"$HOME/.vscode-server-insiders\" \"$HOME/.vscode-server\" \"$HOME/.config/Code - Insiders\" \"$HOME/.config/Code\" \"$HOME/.vscode-remote\"; do f=\"$d/agentPlugins/github.com/iamvikshan/atlas/scripts/hooks/subagent-start.sh\"; [ -f \"$f\" ] && exec bash \"$f\"; done; [ -f \"./scripts/hooks/subagent-start.sh\" ] && exec bash \"./scripts/hooks/subagent-start.sh\"; echo \"atlas: subagent-start hook not found\" >&2; exit 1",
+        "windows": "powershell -NonInteractive -NoProfile -Command \"$c=(@('Code - Insiders','Code')|%{$env:APPDATA+'\\\\'+$_+'\\\\agentPlugins\\\\github.com\\\\iamvikshan\\\\atlas\\\\scripts\\\\hooks\\\\subagent-start.ps1'})+@('.\\\\scripts\\\\hooks\\\\subagent-start.ps1');$f=$c|?{Test-Path $_}|Select-Object -First 1;if(-not $f){[Console]::Error.WriteLine('atlas: subagent-start hook not found');exit 1};& $f\"",
         "timeout": 5
       }
     ],
@@ -60,6 +66,7 @@
         "command": "./scripts/hooks/session-stop.sh",
         "osx": "for d in \"$HOME/Library/Application Support/Code - Insiders\" \"$HOME/Library/Application Support/Code\"; do f=\"$d/agentPlugins/github.com/iamvikshan/atlas/scripts/hooks/session-stop.sh\"; [ -f \"$f\" ] && exec bash \"$f\"; done; [ -f \"./scripts/hooks/session-stop.sh\" ] && exec bash \"./scripts/hooks/session-stop.sh\"; echo \"atlas: session-stop hook not found\" >&2; exit 1",
         "linux": "for d in \"$HOME/.vscode-server-insiders\" \"$HOME/.vscode-server\" \"$HOME/.config/Code - Insiders\" \"$HOME/.config/Code\" \"$HOME/.vscode-remote\"; do f=\"$d/agentPlugins/github.com/iamvikshan/atlas/scripts/hooks/session-stop.sh\"; [ -f \"$f\" ] && exec bash \"$f\"; done; [ -f \"./scripts/hooks/session-stop.sh\" ] && exec bash \"./scripts/hooks/session-stop.sh\"; echo \"atlas: session-stop hook not found\" >&2; exit 1",
+        "windows": "powershell -NonInteractive -NoProfile -Command \"$c=(@('Code - Insiders','Code')|%{$env:APPDATA+'\\\\'+$_+'\\\\agentPlugins\\\\github.com\\\\iamvikshan\\\\atlas\\\\scripts\\\\hooks\\\\session-stop.ps1'})+@('.\\\\scripts\\\\hooks\\\\session-stop.ps1');$f=$c|?{Test-Path $_}|Select-Object -First 1;if(-not $f){[Console]::Error.WriteLine('atlas: session-stop hook not found');exit 1};& $f\"",
         "timeout": 10
       }
     ]

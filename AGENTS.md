@@ -14,19 +14,20 @@ This is a VS Code agent plugin containing markdown agent instructions, shell scr
 
 ## File Types
 
-| Extension   | Purpose                                    |
-| ----------- | ------------------------------------------ |
-| `.agent.md` | Agent instruction files                    |
-| `.sh`       | Hook and utility scripts                   |
-| `.json`     | Plugin manifest, hook configs, MCP configs |
-| `.md`       | Skills, docs, references                   |
+| Extension   | Purpose                                              |
+| ----------- | ---------------------------------------------------- |
+| `.agent.md` | Agent instruction files                              |
+| `.sh`       | Hook and utility scripts                             |
+| `.ps1`      | Windows hook scripts (exception to `.sh` convention) |
+| `.json`     | Plugin manifest, hook configs, MCP configs           |
+| `.md`       | Skills, docs, references                             |
 
 ## Naming Conventions
 
 - File names: `kebab-case`
 - Agent names in prose: `**bold**` (e.g., **atlas**, **ekko**)
 - Skill directories: `kebab-case` under `skills/`
-- Hook scripts: `kebab-case.sh` under `scripts/hooks/`
+- Hook scripts: `kebab-case.sh` under `scripts/hooks/` (Windows exception: `kebab-case.ps1` mirrors each `.sh` hook)
 
 ## Quality Gates
 

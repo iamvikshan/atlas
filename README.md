@@ -36,7 +36,7 @@ copilot plugin install atlas
 
 > [!WARNING]
 >
-> `skills`, `MCPs`, and `agents` load with no issues, but bundled `hooks` currently have known-unidentified issues, likely related to VS Code agent plugins being in preview.
+> `skills`, `MCPs`, and `agents` load with no issues. Bundled `hooks` require manual path registration due to VS Code agent plugins being in preview.
 >
 > for `hooks` to work, `cmd + shift + p` -> `Preferences: Open User Settings (UI)` -> search `@id:chat.hookFilesLocations` -> `Add Item` -> `~/Library/Application Support/Code - Insiders/agentPlugins/github.com/iamvikshan/atlas/hooks` or the equivalent path on your OS and VS Code.
 
@@ -130,7 +130,7 @@ Atlas proceeds phase-by-phase without stopping, auto-committing after review pas
 
 ## Hooks
 
-Atlas ships with lifecycle hooks in `hooks/quality.json`.
+Atlas ships with lifecycle hooks in `hooks/quality.json`. Bash scripts (`scripts/hooks/*.sh`) run on macOS and Linux; PowerShell scripts (`scripts/hooks/*.ps1`) run on Windows. Both sets are functionally equivalent.
 
 - Session lifecycle hooks initialize context, preserve state before compaction, and warn about loose ends at stop time.
 - Prompt and tool guard hooks catch Autopilot triggers, read-before-edit violations, and comment-density regressions.
