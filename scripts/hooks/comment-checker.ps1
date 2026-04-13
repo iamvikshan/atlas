@@ -21,11 +21,14 @@ $ext = [System.IO.Path]::GetExtension($filePath).TrimStart('.')
 $supportedExts = @('js','ts','tsx','jsx','go','java','c','cpp','rs','swift','kt','cs','py','sh','bash','zsh','yml','yaml','toml','rb','html','xml','svg','vue','ps1')
 if ($ext -notin $supportedExts) { exit 0 }
 
-$totalLines   = 0
-$commentLines = 0
-$inJsdoc      = $false
-$inBlock      = $false
-$inHtmlBlock  = $false
+$totalLines    = 0
+$commentLines  = 0
+$inJsdoc       = $false
+$inCBlock      = $false
+$inPsBlock     = $false
+$inHtmlBlock   = $false
+$inScriptBlock = $false
+$inStyleBlock  = $false
 
 foreach ($line in [System.IO.File]::ReadLines($filePath)) {
     $trimmed = $line.Trim()
@@ -36,9 +39,14 @@ foreach ($line in [System.IO.File]::ReadLines($filePath)) {
         if ($trimmed.EndsWith('*/')) { $inJsdoc = $false }
         continue
     }
-    if ($inBlock) {
+    if ($inCBlock) {
         $commentLines++
-        if ($trimmed.EndsWith('*/') -or $trimmed.EndsWith('#>')) { $inBlock = $false }
+        if ($trimmed.EndsWith('*/')) { $inCBlock = $false }
+        continue
+    }
+    if ($inPsBlock) {
+        $commentLines++
+        if ($trimmed.EndsWith('#>')) { $inPsBlock = $false }
         continue
     }
     if ($inHtmlBlock) {
@@ -53,12 +61,19 @@ foreach ($line in [System.IO.File]::ReadLines($filePath)) {
     }
     if ($trimmed.StartsWith('/*')) {
         $commentLines++
-        if (-not $trimmed.EndsWith('*/')) { $inBlock = $true }
+        if (-not $trimmed.EndsWith('*/')) { $inCBlock = $true }
         continue
     }
 
     switch -Wildcard ($ext) {
-        { $_ -in @('js','ts','tsx','jsx','go','java','c','cpp','rs','swift','kt','cs') } {
+        'rs' {
+            if ($trimmed.StartsWith('//')) {
+                if ($trimmed -notmatch '^//[/!]' -and $trimmed -notmatch '^//\s*(SAFETY:|FIXME:|TODO:|noinspection\b|NOLINT|nosec|nolint)') {
+                    $commentLines++
+                }
+            }
+        }
+        { $_ -in @('js','ts','tsx','jsx','go','java','c','cpp','swift','kt','cs') } {
             if ($trimmed.StartsWith('//')) {
                 if ($trimmed -notmatch '^//\s*(eslint-disable|@ts-|prettier-ignore|noinspection|NOLINT|nosec|nolint|istanbul)') {
                     $commentLines++
@@ -80,15 +95,26 @@ foreach ($line in [System.IO.File]::ReadLines($filePath)) {
             }
         }
         { $_ -in @('html','xml','svg','vue') } {
-            if ($trimmed.StartsWith('<!--')) {
-                $commentLines++
-                if (-not $trimmed.Contains('-->')) { $inHtmlBlock = $true }
+            if ($inScriptBlock) {
+                if ($trimmed -match '(?i)</script\s*>') { $inScriptBlock = $false; break }
+                if ($trimmed.StartsWith('//') -and $trimmed -notmatch '^//\s*(eslint-disable|@ts-|prettier-ignore|noinspection|NOLINT|nosec|nolint|istanbul)') {
+                    $commentLines++
+                }
+            } elseif ($inStyleBlock) {
+                if ($trimmed -match '(?i)</style\s*>') { $inStyleBlock = $false; break }
+            } else {
+                if ($trimmed -match '(?i)<script[\s>]' -and $trimmed -notmatch '(?i)</script\s*>') { $inScriptBlock = $true }
+                elseif ($trimmed -match '(?i)<style[\s>]' -and $trimmed -notmatch '(?i)</style\s*>') { $inStyleBlock = $true }
+                if ($trimmed.StartsWith('<!--')) {
+                    $commentLines++
+                    if (-not $trimmed.Contains('-->')) { $inHtmlBlock = $true }
+                }
             }
         }
         'ps1' {
             if ($trimmed.StartsWith('<#')) {
                 $commentLines++
-                if (-not $trimmed.EndsWith('#>')) { $inBlock = $true }
+                if (-not $trimmed.EndsWith('#>')) { $inPsBlock = $true }
             } elseif ($trimmed.StartsWith('#')) {
                 if ($trimmed -notmatch '^#\s*(Requires|region|endregion)') {
                     $commentLines++

@@ -126,14 +126,12 @@ fi
 RATIO=$((COMMENT_LINES * 100 / TOTAL_LINES))
 
 if [[ $RATIO -gt 30 ]]; then
-  cat <<EOF
-{
-  "hookSpecificOutput": {
-    "hookEventName": "PostToolUse",
-    "additionalContext": "WARNING: ${FILE_PATH##*/} has ${RATIO}% comment density (${COMMENT_LINES}/${TOTAL_LINES} non-blank lines). Comments exceeding 30% often indicate AI slop -- restating what code obviously does. Remove comments that add no value beyond what the code communicates. JSDoc/docstrings for public APIs and directive comments are already excluded from this count."
-  }
-}
-EOF
+  jq -n \
+    --arg path "${FILE_PATH##*/}" \
+    --arg ratio "$RATIO" \
+    --arg comments "$COMMENT_LINES" \
+    --arg total "$TOTAL_LINES" \
+    '{hookSpecificOutput: {hookEventName: "PostToolUse", additionalContext: ("WARNING: " + $path + " has " + $ratio + "% comment density (" + $comments + "/" + $total + " non-blank lines). Comments exceeding 30% often indicate AI slop -- restating what code obviously does. Remove comments that add no value beyond what the code communicates. JSDoc/docstrings for public APIs and directive comments are already excluded from this count.")}}'
 fi
 
 exit 0

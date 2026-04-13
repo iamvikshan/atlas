@@ -16,7 +16,7 @@ if ($transcriptPath -and (Test-Path $transcriptPath)) {
         $msgs = $transcript | ConvertFrom-Json -ErrorAction SilentlyContinue
         $msgCount = if ($msgs) { $msgs.Count } else { 'unknown' }
 
-        $filePaths = [System.Text.RegularExpressions.Regex]::Matches($transcript, '/[a-zA-Z0-9_./ -]+\.[a-zA-Z0-9]+') |
+        $filePaths = [System.Text.RegularExpressions.Regex]::Matches($transcript, '(?:/|[A-Za-z]:[/\\])[a-zA-Z0-9_./\\-]+\.[a-zA-Z0-9]+') |
             ForEach-Object { $_.Value } |
             Where-Object { $_ -notmatch '//|http|https|www' } |
             Sort-Object -Unique |

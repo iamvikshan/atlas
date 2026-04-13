@@ -26,10 +26,12 @@ if (-not $transcriptPath -or -not (Test-Path $transcriptPath)) { exit 0 }
 $transcriptContent = Get-Content $transcriptPath -Raw -ErrorAction SilentlyContinue
 if (-not $transcriptContent) { exit 0 }
 
-if ($transcriptContent.IndexOf($filePath, [StringComparison]::OrdinalIgnoreCase) -ge 0) { exit 0 }
+$escapedFull = [Regex]::Escape($filePath)
+if ($transcriptContent -imatch $escapedFull) { exit 0 }
 
-$baseName = [System.IO.Path]::GetFileName($filePath)
-if ($transcriptContent.IndexOf($baseName, [StringComparison]::OrdinalIgnoreCase) -ge 0) { exit 0 }
+$baseName    = [System.IO.Path]::GetFileName($filePath)
+$escapedBase = [Regex]::Escape($baseName)
+if ($transcriptContent -imatch "(?<![a-zA-Z0-9._\-])$escapedBase(?![a-zA-Z0-9._\-])") { exit 0 }
 
 [PSCustomObject]@{
     hookSpecificOutput = [PSCustomObject]@{

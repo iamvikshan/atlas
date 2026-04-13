@@ -14,5 +14,13 @@ if (-not (Test-Path $script)) {
     exit 1
 }
 
-& powershell.exe -NonInteractive -NoProfile -OutputFormat Text -File $script @args
-exit $LASTEXITCODE
+$executor = if (Get-Command pwsh -ErrorAction SilentlyContinue) {
+    'pwsh'
+} elseif (Get-Command powershell -ErrorAction SilentlyContinue) {
+    'powershell'
+} else {
+    if ($env:OS -eq 'Windows_NT') { 'pwsh.exe' } else { 'pwsh' }
+}
+& $executor -NonInteractive -NoProfile -File $script @args
+$ec = if ($null -ne $LASTEXITCODE) { $LASTEXITCODE } else { 1 }
+exit $ec

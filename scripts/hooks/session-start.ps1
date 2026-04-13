@@ -35,17 +35,20 @@ function Get-NativeCommandOutput {
 
 $memoriesDir = Join-Path $cwd 'memories\repo'
 if (Test-Path $memoriesDir -PathType Container) {
-    $summary = ''
+    $items = [System.Collections.Generic.List[string]]::new()
     foreach ($f in Get-ChildItem $memoriesDir -Filter '*.json' -ErrorAction SilentlyContinue) {
         try {
             $mem = Get-Content $f.FullName -Raw | ConvertFrom-Json
             if ($mem.PSObject.Properties['subject'] -and $mem.PSObject.Properties['fact']) {
-                $summary += "- $($mem.subject): $($mem.fact)`n"
+                $items.Add("- $($mem.subject): $($mem.fact)")
             }
         }
         catch {}
     }
-    if ($summary) { $parts.Add("Project conventions:`n$summary") }
+    if ($items.Count -gt 0) {
+        $items.Insert(0, 'Project conventions:')
+        $parts.Add($items -join "`n")
+    }
 }
 
 if (Get-Command git -ErrorAction SilentlyContinue) {
@@ -74,10 +77,10 @@ elseif (Test-Path $pyproj) {
             if ($pyLine -match '^\[project\]') { $inProjectSection = $true; continue }
             if ($inProjectSection -and $pyLine -match '^\[') { break }
             if ($inProjectSection) {
-                if ($pyLine -match "^\s*name\s*=\s*'([^']+)'\s*$") {
+                if ($pyLine -match "^\s*name\s*=\s*'([^']+)'\s*(#.*)?\s*$") {
                     $parts.Add("Project: $($Matches[1]) (Python)"); break
                 }
-                if ($pyLine -match '^\s*name\s*=\s*"([^"]+)"\s*$') {
+                if ($pyLine -match '^\s*name\s*=\s*"([^"]+)"\s*(#.*)?\s*$') {
                     $parts.Add("Project: $($Matches[1]) (Python)"); break
                 }
             }
@@ -95,8 +98,12 @@ $pythonVersion = Get-NativeCommandOutput -CommandName 'python3' -Arguments @('--
 if (-not $pythonVersion) {
     $pythonVersion = Get-NativeCommandOutput -CommandName 'python' -Arguments @('--version')
 }
-if ($pythonVersion) {
-    $parts.Add("Python: $($pythonVersion -replace '^Python\s+', '')")
+$pyCmd = if (Get-Command python3 -ErrorAction SilentlyContinue) { 'python3' }
+         elseif (Get-Command python -ErrorAction SilentlyContinue) { 'python' }
+         else { $null }
+if ($pyCmd) {
+    $v = & $pyCmd --version 2>$null
+    if ($v) { $parts.Add("Python: $($v -replace 'Python ','')") }
 }
 
 if ($parts.Count -eq 0) { exit 0 }
