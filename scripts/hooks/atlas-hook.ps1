@@ -1,6 +1,7 @@
 param([Parameter(Mandatory)][string]$Hook)
 Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
+$ProgressPreference = 'SilentlyContinue'
 
 if ($Hook -notmatch '^[a-zA-Z0-9_-]+$') {
     [Console]::Error.WriteLine("atlas: invalid hook name '$Hook'")
@@ -13,5 +14,5 @@ if (-not (Test-Path $script)) {
     exit 1
 }
 
-& powershell.exe -NonInteractive -NoProfile -File $script @args
+& powershell.exe -NonInteractive -NoProfile -OutputFormat Text -File $script @args
 exit $LASTEXITCODE
