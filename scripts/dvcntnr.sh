@@ -56,7 +56,8 @@ for f in "$SRC"/.*; do
 done
 
 if [ "$copied" -eq 0 ]; then
-  echo "WARNING: source hooks directory is empty; nothing copied." >&2
+  echo "ERROR: source hooks directory is empty; nothing copied." >&2
+  exit 1
 else
   echo "Hooks successfully fetched and copied!"
 fi

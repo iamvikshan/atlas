@@ -4,7 +4,7 @@ $ErrorActionPreference = 'Stop'
 
 $raw = [Console]::In.ReadToEnd()
 if (-not $raw.Trim()) { exit 0 }
-try { $data = $raw | ConvertFrom-Json } catch { exit 0 }
+try { $data = $raw | ConvertFrom-Json } catch { exit 0 } # non-JSON input (e.g. ping) is not an error
 
 $prompt = if ($data.PSObject.Properties['prompt']) { [string]$data.prompt } else { '' }
 if (-not $prompt) { exit 0 }
@@ -15,7 +15,7 @@ if ($prompt -match '(?i)\b(ULW|YOLO)\b') {
     $message = 'Autopilot mode detected. Proceed autonomously without user stops. Auto-commit after **sentry** approval. Present final summary when all work is done.'
 }
 
-$promptLower = $prompt.ToLower()
+$promptLower = $prompt.ToLower() -replace '[\u2018\u2019]', "'"
 $antiPatterns = @("without testing","skip tests","skip review","don't test","no tests","just do it")
 foreach ($p in $antiPatterns) {
     if ($promptLower.Contains($p)) {
