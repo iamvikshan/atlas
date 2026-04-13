@@ -12,6 +12,27 @@ if (-not $cwd) { exit 0 }
 
 $parts = [System.Collections.Generic.List[string]]::new()
 
+function Get-NativeCommandOutput {
+    param(
+        [Parameter(Mandatory)][string]$CommandName,
+        [Parameter(Mandatory)][string[]]$Arguments
+    )
+
+    try {
+        $command = Get-Command $CommandName -ErrorAction Stop
+        $commandPath = if ($command.PSObject.Properties['Path'] -and $command.Path) { [string]$command.Path } else { [string]$command.Source }
+        if (-not $commandPath) { return $null }
+
+        $output = & $commandPath @Arguments 2>&1
+        if ($LASTEXITCODE -ne 0 -or -not $output) { return $null }
+
+        return ((@($output) | ForEach-Object { "$_" }) -join "`n").Trim()
+    }
+    catch {
+        return $null
+    }
+}
+
 $memoriesDir = Join-Path $cwd 'memories\repo'
 if (Test-Path $memoriesDir -PathType Container) {
     $summary = ''
@@ -21,7 +42,8 @@ if (Test-Path $memoriesDir -PathType Container) {
             if ($mem.PSObject.Properties['subject'] -and $mem.PSObject.Properties['fact']) {
                 $summary += "- $($mem.subject): $($mem.fact)`n"
             }
-        } catch {}
+        }
+        catch {}
     }
     if ($summary) { $parts.Add("Project conventions:`n$summary") }
 }
@@ -34,15 +56,17 @@ if (Get-Command git -ErrorAction SilentlyContinue) {
 }
 
 $pkgJson = Join-Path $cwd 'package.json'
-$pyproj  = Join-Path $cwd 'pyproject.toml'
+$pyproj = Join-Path $cwd 'pyproject.toml'
 if (Test-Path $pkgJson) {
     try {
         $pkg = Get-Content $pkgJson -Raw | ConvertFrom-Json
         if ($pkg.PSObject.Properties['name'] -and $pkg.name) {
             $parts.Add("Project: $($pkg.name) (Node.js)")
         }
-    } catch {}
-} elseif (Test-Path $pyproj) {
+    }
+    catch {}
+}
+elseif (Test-Path $pyproj) {
     try {
         $pyLines = Get-Content $pyproj -ErrorAction Stop
         $inProjectSection = $false
@@ -58,15 +82,21 @@ if (Test-Path $pkgJson) {
                 }
             }
         }
-    } catch {}
+    }
+    catch {}
 }
 
-if (Get-Command node -ErrorAction SilentlyContinue) {
-    $v = node --version 2>$null; if ($v) { $parts.Add("Node: $v") }
+$nodeVersion = Get-NativeCommandOutput -CommandName 'node' -Arguments @('--version')
+if ($nodeVersion) {
+    $parts.Add("Node: $nodeVersion")
 }
-if (Get-Command python3 -ErrorAction SilentlyContinue) {
-    $v = python3 --version 2>$null
-    if ($v) { $parts.Add("Python: $($v -replace 'Python ','')") }
+
+$pythonVersion = Get-NativeCommandOutput -CommandName 'python3' -Arguments @('--version')
+if (-not $pythonVersion) {
+    $pythonVersion = Get-NativeCommandOutput -CommandName 'python' -Arguments @('--version')
+}
+if ($pythonVersion) {
+    $parts.Add("Python: $($pythonVersion -replace '^Python\s+', '')")
 }
 
 if ($parts.Count -eq 0) { exit 0 }
@@ -74,7 +104,7 @@ if ($parts.Count -eq 0) { exit 0 }
 $compiled = $parts -join "`n"
 [PSCustomObject]@{
     hookSpecificOutput = [PSCustomObject]@{
-        hookEventName   = 'SessionStart'
+        hookEventName     = 'SessionStart'
         additionalContext = $compiled
     }
 } | ConvertTo-Json -Compress -Depth 5
