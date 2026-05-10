@@ -215,3 +215,8 @@ scripts/
 - [`agents/`](agents/) -- agent definitions
 - [`skills/`](skills/) -- bundled skills
 - [`plugins/.mcp.jsonc`](plugins/.mcp.jsonc) -- bundled MCP configuration
+
+---
+
+## Contributing
+Contributions are welcome! YOU MUST SEE [`CONTRIBUTING.md`](https://github.com/iamvikshan/.github/blob/main/.github/CONTRIBUTING.md) for guidelines on how to contribute to this project.
