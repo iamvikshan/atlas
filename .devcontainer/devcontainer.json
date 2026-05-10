@@ -5,7 +5,6 @@
   "customizations": {
     "vscode": {
       "extensions": [
-        "eamodio.gitlens",
         "WakaTime.vscode-wakatime",
         "coderabbit.coderabbit-vscode"
       ]
