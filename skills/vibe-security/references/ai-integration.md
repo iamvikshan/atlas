@@ -13,11 +13,13 @@ All AI API calls go through your backend. The client sends the user's message to
 ## Spending Caps
 
 Set hard spending caps on every AI API provider:
+
 - OpenAI: Usage limits in dashboard
 - Anthropic: Spending limits in console
 - Google: Budget alerts in Cloud Console
 
 Also implement **per-user usage limits** in your application:
+
 - Track token usage per user in your database
 - Set daily/monthly caps per user or per tier
 - Return a clear error when limits are exceeded
@@ -29,16 +31,17 @@ User input must be sanitized before inclusion in prompts. Never concatenate raw 
 
 ```typescript
 // BAD: user can override system instructions
-const prompt = `You are a helpful assistant. User says: ${userInput}`;
+const prompt = `You are a helpful assistant. User says: ${userInput}`
 
 // BETTER: separate system and user messages
 const messages = [
   { role: 'system', content: 'You are a helpful assistant.' },
   { role: 'user', content: userInput },
-];
+]
 ```
 
 Even with separate messages, be aware that sophisticated prompt injection can still occur. For high-stakes applications, consider:
+
 - Input validation and filtering
 - Output validation before acting on LLM responses
 - Limiting the LLM's capabilities (no tool access for user-facing chat)
@@ -54,6 +57,7 @@ LLM responses should be treated as untrusted user input:
 ## Tool / Function Calling
 
 If your application gives an LLM access to tools (database queries, API calls, file operations):
+
 - Restrict operations to a safe allowlist
 - Validate all parameters from the LLM against a schema
 - Use least-privilege access (read-only where possible)

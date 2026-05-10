@@ -10,11 +10,11 @@
 
 Use separate environment variables for each environment in Vercel (or equivalent):
 
-| Environment | Purpose |
-|-------------|---------|
-| Production | Live users, real keys |
-| Preview | PR previews, should use test/staging keys |
-| Development | Local dev, uses local/test keys |
+| Environment | Purpose                                   |
+| ----------- | ----------------------------------------- |
+| Production  | Live users, real keys                     |
+| Preview     | PR previews, should use test/staging keys |
+| Development | Local dev, uses local/test keys           |
 
 Preview deployments should **never** use production API keys, database credentials, or payment keys. A preview deployment is often accessible to anyone with the URL.
 
@@ -36,6 +36,7 @@ Adjust `Content-Security-Policy` based on your app's needs (e.g., if you use inl
 ## Pre-Ship Checks
 
 Before deploying:
+
 - Run `gitleaks detect` on your repo to scan for leaked secrets in git history
 - Verify `.env` files are in `.gitignore`
 - Confirm debug mode / verbose logging is disabled

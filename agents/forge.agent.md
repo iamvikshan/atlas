@@ -1,7 +1,8 @@
 ---
 name: 'forge'
 description: 'DevOps and infrastructure implementation -- CI/CD, containers, cloud, monitoring, and deployment automation'
-tools: [
+tools:
+  [
     vscode/extensions,
     vscode/memory,
     execute/getTerminalOutput,

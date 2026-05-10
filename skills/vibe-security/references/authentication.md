@@ -8,13 +8,13 @@
 
 ```typescript
 // BAD: reads token without verifying signature
-const payload = jwt.decode(token);
+const payload = jwt.decode(token)
 
 // GOOD: verifies signature, rejects tampered tokens
 const payload = jwt.verify(token, secret, {
   algorithms: ['HS256'],
   issuer: 'your-app',
-});
+})
 ```
 
 ## Next.js Middleware Is Not Enough
@@ -22,6 +22,7 @@ const payload = jwt.verify(token, secret, {
 Next.js middleware runs at the edge and is convenient for auth checks, but it is **not a reliable sole auth layer**. CVE-2025-29927 demonstrated that middleware could be completely bypassed via a spoofed `x-middleware-subrequest` header.
 
 Always verify auth again in:
+
 - Server Actions
 - Route Handlers (`app/api/`)
 - Data access functions / database queries
@@ -34,28 +35,29 @@ Server Actions compile into public POST endpoints. Anyone can call them with `cu
 
 ```typescript
 // BAD: no auth check, no input validation
-'use server';
+'use server'
 export async function deleteItem(id: string) {
-  await db.items.delete({ where: { id } });
+  await db.items.delete({ where: { id } })
 }
 
 // GOOD: validates input, authenticates, and authorizes
-'use server';
+;('use server')
 export async function deleteItem(input: unknown) {
-  const parsed = schema.safeParse(input);
-  if (!parsed.success) return { error: 'Invalid input' };
+  const parsed = schema.safeParse(input)
+  if (!parsed.success) return { error: 'Invalid input' }
 
-  const session = await auth();
-  if (!session?.user) redirect('/login');
+  const session = await auth()
+  if (!session?.user) redirect('/login')
 
   // Authorize: verify ownership, not just login
   await db.items.deleteMany({
-    where: { id: parsed.data.id, userId: session.user.id }
-  });
+    where: { id: parsed.data.id, userId: session.user.id },
+  })
 }
 ```
 
 Every Server Action needs three things at the top:
+
 1. **Input validation** (Zod or similar runtime schema)
 2. **Authentication** (verify the user is logged in)
 3. **Authorization** (verify the user owns the resource)

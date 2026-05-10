@@ -70,6 +70,7 @@ Junction tables, audit logs, and metadata tables often lack RLS even when the ma
 ### SECURITY DEFINER Functions
 
 `SECURITY DEFINER` functions bypass RLS entirely. If created in the `public` schema, they're callable via the REST API by anyone. Always:
+
 - Keep them in a `private` schema
 - Set `SET search_path = ''`
 - Validate all inputs inside the function
@@ -87,12 +88,12 @@ CREATE POLICY "Users upload to own folder"
   );
 ```
 
-
 ## Firebase Security Rules
 
 ### Default Rules Are Dangerous
 
 Never ship these:
+
 ```
 // BAD: world-readable and writable
 allow read, write: if true;
@@ -102,6 +103,7 @@ allow read, write: if request.auth != null;
 ```
 
 Always validate ownership:
+
 ```
 allow read, write: if request.auth.uid == userId;
 ```
@@ -125,12 +127,14 @@ Subcollections are **NOT** secured by parent rules. Each subcollection needs its
 ### Data Validation
 
 Validate data types and sizes on writes:
+
 ```
 allow create: if request.resource.data.displayName is string
   && request.resource.data.displayName.size() <= 50;
 ```
 
 Enforce server timestamps:
+
 ```
 allow create: if request.resource.data.createdAt == request.time;
 ```
@@ -142,7 +146,6 @@ Use custom claims (`request.auth.token.role`) instead of querying a users docume
 ### Cloud Storage Rules
 
 Must validate `contentType`, `size`, and path ownership. Without this, users can upload executables or store files in other users' paths.
-
 
 ## Convex
 

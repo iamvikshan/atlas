@@ -2,7 +2,7 @@
 
 ## Color Spaces: Use OKLCH
 
-**Stop using HSL.** Use OKLCH (or LCH) instead. It's perceptually uniform, meaning equal steps in lightness *look* equal -- unlike HSL where 50% lightness in yellow looks bright while 50% in blue looks dark.
+**Stop using HSL.** Use OKLCH (or LCH) instead. It's perceptually uniform, meaning equal steps in lightness _look_ equal -- unlike HSL where 50% lightness in yellow looks bright while 50% in blue looks dark.
 
 ```css
 /* OKLCH: lightness (0-100%), chroma (0-0.4+), hue (0-360) */
@@ -39,12 +39,12 @@ The chroma is tiny (0.01) but perceptible. It creates subconscious cohesion betw
 
 A complete system needs:
 
-| Role | Purpose | Example |
-|------|---------|---------|
-| **Primary** | Brand, CTAs, key actions | 1 color, 3-5 shades |
-| **Neutral** | Text, backgrounds, borders | 9-11 shade scale |
+| Role         | Purpose                       | Example                   |
+| ------------ | ----------------------------- | ------------------------- |
+| **Primary**  | Brand, CTAs, key actions      | 1 color, 3-5 shades       |
+| **Neutral**  | Text, backgrounds, borders    | 9-11 shade scale          |
 | **Semantic** | Success, error, warning, info | 4 colors, 2-3 shades each |
-| **Surface** | Cards, modals, overlays | 2-3 elevation levels |
+| **Surface**  | Cards, modals, overlays       | 2-3 elevation levels      |
 
 **Skip secondary/tertiary unless you need them.** Most apps work fine with one accent color. Adding more creates decision fatigue and visual noise.
 
@@ -56,18 +56,18 @@ This rule is about **visual weight**, not pixel count:
 - **30%**: Secondary colors -- text, borders, inactive states
 - **10%**: Accent -- CTAs, highlights, focus states
 
-The common mistake: using the accent color everywhere because it's "the brand color." Accent colors work *because* they're rare. Overuse kills their power.
+The common mistake: using the accent color everywhere because it's "the brand color." Accent colors work _because_ they're rare. Overuse kills their power.
 
 ## Contrast & Accessibility
 
 ### WCAG Requirements
 
-| Content Type | AA Minimum | AAA Target |
-|--------------|------------|------------|
-| Body text | 4.5:1 | 7:1 |
-| Large text (18px+ or 14px bold) | 3:1 | 4.5:1 |
-| UI components, icons | 3:1 | 4.5:1 |
-| Non-essential decorations | None | None |
+| Content Type                    | AA Minimum | AAA Target |
+| ------------------------------- | ---------- | ---------- |
+| Body text                       | 4.5:1      | 7:1        |
+| Large text (18px+ or 14px bold) | 3:1        | 4.5:1      |
+| UI components, icons            | 3:1        | 4.5:1      |
+| Non-essential decorations       | None       | None       |
 
 **The gotcha**: If placeholder text is needed to understand or complete the field, treat it like instructional copy and make it meet 4.5:1. Better yet, keep a visible label and avoid relying on placeholder text alone.
 
@@ -100,16 +100,16 @@ Don't trust your eyes. Use tools:
 
 You can't just swap colors. Dark mode requires different design decisions:
 
-| Light Mode | Dark Mode |
-|------------|-----------|
-| Shadows for depth | Lighter surfaces for depth first; shadows are subtle if used at all |
-| Dark text on light | Light text on dark (reduce font weight) |
-| Vibrant accents | Desaturate accents slightly |
-| White backgrounds | Never pure black -- use dark gray (oklch 12-18%) |
+| Light Mode         | Dark Mode                                                           |
+| ------------------ | ------------------------------------------------------------------- |
+| Shadows for depth  | Lighter surfaces for depth first; shadows are subtle if used at all |
+| Dark text on light | Light text on dark (reduce font weight)                             |
+| Vibrant accents    | Desaturate accents slightly                                         |
+| White backgrounds  | Never pure black -- use dark gray (oklch 12-18%)                    |
 
 ```css
 /* Dark mode depth via surface color, not shadow */
-:root[data-theme="dark"] {
+:root[data-theme='dark'] {
   --surface-1: oklch(15% 0.01 250);
   --surface-2: oklch(20% 0.01 250);
   --surface-3: oklch(25% 0.01 250);

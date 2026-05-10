@@ -30,16 +30,16 @@ no labels, no status changes, no closes, no merges.
 
 Classify every item into exactly one category:
 
-| Category | Description |
-|----------|-------------|
-| `ISSUE_BUG` | Bug report with reproduction steps or error evidence |
-| `ISSUE_FEATURE` | Feature request or enhancement proposal |
-| `ISSUE_QUESTION` | Support question or usage clarification |
-| `ISSUE_OTHER` | Anything not fitting the above (meta, discussion, etc.) |
-| `PR_BUGFIX` | Pull request that fixes a reported bug |
-| `PR_FEATURE` | Pull request that adds new functionality |
-| `PR_REFACTOR` | Pull request that restructures without behavior change |
-| `PR_OTHER` | Pull request not fitting the above (docs, chore, etc.) |
+| Category         | Description                                             |
+| ---------------- | ------------------------------------------------------- |
+| `ISSUE_BUG`      | Bug report with reproduction steps or error evidence    |
+| `ISSUE_FEATURE`  | Feature request or enhancement proposal                 |
+| `ISSUE_QUESTION` | Support question or usage clarification                 |
+| `ISSUE_OTHER`    | Anything not fitting the above (meta, discussion, etc.) |
+| `PR_BUGFIX`      | Pull request that fixes a reported bug                  |
+| `PR_FEATURE`     | Pull request that adds new functionality                |
+| `PR_REFACTOR`    | Pull request that restructures without behavior change  |
+| `PR_OTHER`       | Pull request not fitting the above (docs, chore, etc.)  |
 
 ## Workflow
 
@@ -67,11 +67,13 @@ Collect: number, title, author, created date, labels, assignees.
 For each item, fetch full details using the appropriate method:
 
 **Issues** (via `github/issue_read`):
+
 - `method: get` -- Issue body, metadata, assignees, labels
 - `method: get_comments` -- Discussion thread and contributor replies
 - `method: get_labels` -- Current label set
 
 **Pull Requests** (via `github/pull_request_read`):
+
 - `method: get` -- PR body, metadata, head/base branches
 - `method: get_diff` -- Actual code changes
 - `method: get_files` -- List of changed files with stats
@@ -109,18 +111,20 @@ Produce the report in the format below.
 
 ```markdown
 # Triage Report: {repo-owner}/{repo-name}
+
 Date: {YYYY-MM-DD}
 Items analyzed: {count}
 
 ## Summary
 
-| Category | Count |
-|----------|-------|
-| ISSUE_BUG | N |
-| ISSUE_FEATURE | N |
-| ... | ... |
+| Category      | Count |
+| ------------- | ----- |
+| ISSUE_BUG     | N     |
+| ISSUE_FEATURE | N     |
+| ...           | ...   |
 
 ### Critical Items
+
 - #{number}: {title} -- {one-line reason it's critical}
 
 ---
@@ -128,6 +132,7 @@ Items analyzed: {count}
 ## Issues
 
 ### #{number}: {title}
+
 - **Classification:** {category}
 - **Priority:** {level}
 - **Author:** @{username}
@@ -140,6 +145,7 @@ Items analyzed: {count}
 What codebase area is affected? Any similar past issues?}
 
 **Evidence:**
+
 - {claim}: {GitHub permalink}
 - {claim}: {GitHub permalink}
 
@@ -150,6 +156,7 @@ What codebase area is affected? Any similar past issues?}
 ## Pull Requests
 
 ### #{number}: {title}
+
 - **Classification:** {category}
 - **Priority:** {level}
 - **Author:** @{username}
@@ -163,6 +170,7 @@ What codebase area is affected? Any similar past issues?}
 Are tests included? Any concerning patterns in the diff?}
 
 **Evidence:**
+
 - {claim}: {GitHub permalink}
 - {claim}: {GitHub permalink}
 
@@ -171,16 +179,16 @@ Are tests included? Any concerning patterns in the diff?}
 
 ## Anti-Patterns
 
-| Anti-Pattern | Why It's Wrong | Do This Instead |
-|--------------|----------------|-----------------|
-| Commenting on issues | Violates read-only principle | Put findings in the report only |
-| Adding labels | Mutates repository state | Note suggested labels in report |
-| Closing stale issues | Not your call | Flag as `low` priority with "stale" note |
-| Approving/requesting changes on PRs | Mutates review state | Recommend action in report |
-| Summarizing multiple items together | Hides individual nuance | One section per item, always |
-| Claims without permalinks | Unverifiable assertions | Every claim cites a GitHub URL |
-| Guessing root cause without evidence | Misleading triage | State uncertainty explicitly |
-| Skipping items that seem unimportant | Triage means triaging everything | Classify as `low` but still analyze |
+| Anti-Pattern                         | Why It's Wrong                   | Do This Instead                          |
+| ------------------------------------ | -------------------------------- | ---------------------------------------- |
+| Commenting on issues                 | Violates read-only principle     | Put findings in the report only          |
+| Adding labels                        | Mutates repository state         | Note suggested labels in report          |
+| Closing stale issues                 | Not your call                    | Flag as `low` priority with "stale" note |
+| Approving/requesting changes on PRs  | Mutates review state             | Recommend action in report               |
+| Summarizing multiple items together  | Hides individual nuance          | One section per item, always             |
+| Claims without permalinks            | Unverifiable assertions          | Every claim cites a GitHub URL           |
+| Guessing root cause without evidence | Misleading triage                | State uncertainty explicitly             |
+| Skipping items that seem unimportant | Triage means triaging everything | Classify as `low` but still analyze      |
 
 ## Scope Limits
 

@@ -21,6 +21,7 @@ Use `repeat(auto-fit, minmax(280px, 1fr))` for responsive grids without breakpoi
 ### The Squint Test
 
 Blur your eyes (or screenshot and blur). Can you still identify:
+
 - The most important element?
 - The second most important?
 - Clear groupings?
@@ -31,13 +32,13 @@ If everything looks the same weight blurred, you have a hierarchy problem.
 
 Don't rely on size alone. Combine:
 
-| Tool | Strong Hierarchy | Weak Hierarchy |
-|------|------------------|----------------|
-| **Size** | 3:1 ratio or more | <2:1 ratio |
-| **Weight** | Bold vs Regular | Medium vs Regular |
-| **Color** | High contrast | Similar tones |
-| **Position** | Top/left (primary) | Bottom/right |
-| **Space** | Surrounded by white space | Crowded |
+| Tool         | Strong Hierarchy          | Weak Hierarchy    |
+| ------------ | ------------------------- | ----------------- |
+| **Size**     | 3:1 ratio or more         | <2:1 ratio        |
+| **Weight**   | Bold vs Regular           | Medium vs Regular |
+| **Color**    | High contrast             | Similar tones     |
+| **Position** | Top/left (primary)        | Bottom/right      |
+| **Space**    | Surrounded by white space | Crowded           |
 
 **The best hierarchy uses 2-3 dimensions at once**: A heading that's larger, bolder, AND has more space above it.
 

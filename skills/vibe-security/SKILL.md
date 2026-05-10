@@ -4,18 +4,16 @@ description: Audits codebases for common security vulnerabilities that AI coding
 license: MIT
 metadata:
   author: Chris Raroque
-  version: "1.0"
+  version: '1.0'
 ---
 
 Audit code for security vulnerabilities commonly introduced by AI code generation. These issues are prevalent in "vibe-coded" apps — projects built rapidly with AI assistance where security fundamentals get skipped.
 
 AI assistants consistently get these patterns wrong, leading to real breaches, stolen API keys, and drained billing accounts. This skill exists to catch those mistakes before they ship.
 
-
 ## The Core Principle
 
 Never trust the client. Every price, user ID, role, subscription status, feature flag, and rate limit counter must be validated or enforced server-side. If it exists only in the browser, mobile bundle, or request body, an attacker controls it.
-
 
 ## Audit Process
 
@@ -41,7 +39,6 @@ Examine the codebase systematically. For each step, load the relevant reference 
 
 If doing a partial review or generating code in a specific area, load only the relevant reference files.
 
-
 ## Core Instructions
 
 - Report only genuine security issues. Do not nitpick style or non-security concerns.
@@ -50,12 +47,12 @@ If doing a partial review or generating code in a specific area, load only the r
 - When generating new code, consult the relevant reference files proactively to avoid introducing vulnerabilities in the first place.
 - If you find a critical issue (exposed secrets, disabled RLS, auth bypass), flag it immediately at the top of your response — don't bury it in a long list.
 
-
 ## Output Format
 
 Organize findings by severity: **Critical** → **High** → **Medium** → **Low**.
 
 For each issue:
+
 1. State the file and relevant line(s).
 2. Name the vulnerability.
 3. Explain what an attacker could do (concrete impact, not abstract risk).
@@ -73,7 +70,10 @@ The `service_role` key bypasses all Row-Level Security. Anyone can extract it fr
 
 ```typescript
 // Before
-const supabase = createClient(url, process.env.NEXT_PUBLIC_SUPABASE_SERVICE_KEY!)
+const supabase = createClient(
+  url,
+  process.env.NEXT_PUBLIC_SUPABASE_SERVICE_KEY!
+)
 
 // After — use the anon key client-side; service_role belongs only in server-side code
 const supabase = createClient(url, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!)
@@ -88,13 +88,15 @@ An attacker can set any price (including $0.01) by modifying the request. Prices
 ```typescript
 // Before
 const session = await stripe.checkout.sessions.create({
-  line_items: [{ price_data: { unit_amount: req.body.price } }]
+  line_items: [{ price_data: { unit_amount: req.body.price } }],
 })
 
 // After — look up the price server-side
-const product = await db.products.findUnique({ where: { id: req.body.productId } })
+const product = await db.products.findUnique({
+  where: { id: req.body.productId },
+})
 const session = await stripe.checkout.sessions.create({
-  line_items: [{ price: product.stripePriceId }]
+  line_items: [{ price: product.stripePriceId }],
 })
 ```
 
@@ -103,11 +105,9 @@ const session = await stripe.checkout.sessions.create({
 1. **Service role key exposed (Critical):** Anyone can bypass all database security. Rotate the key immediately and move it to server-side only.
 2. **Client-controlled pricing (High):** Attackers can purchase at any price. Use server-side price lookup.
 
-
 ## When Generating Code
 
 These rules also apply proactively. Before writing code that touches auth, payments, database access, API keys, or user data, consult the relevant reference file to avoid introducing the vulnerability in the first place. Prevention is better than detection.
-
 
 ## References
 
