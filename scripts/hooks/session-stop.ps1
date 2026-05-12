@@ -1,4 +1,3 @@
-# Stop hook: Checks for uncommitted changes and temp artifacts before session ends.
 Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
 
@@ -9,31 +8,39 @@ try { $data = $raw | ConvertFrom-Json } catch { exit 0 }
 $stopHookActive = if ($data.PSObject.Properties['stop_hook_active']) { [string]$data.stop_hook_active } else { 'false' }
 if ($stopHookActive -eq 'true') { exit 0 }
 
-$cwd = if ($data.PSObject.Properties['cwd']) { [string]$data.cwd } else { '' }
-if (-not $cwd) { exit 0 }
+$cwd = if ($data.PSObject.Properties['cwd']) { $data.cwd } else { '' }
+if (-not $cwd -or -not (Test-Path $cwd)) { exit 0 }
 
-$warnings = [System.Collections.Generic.List[string]]::new()
+$warnings = @()
 
+# 1. Git check
 if (Get-Command git -ErrorAction SilentlyContinue) {
-    if (Test-Path (Join-Path $cwd '.git') -PathType Container) {
-        $dirty = git -C $cwd status --porcelain 2>$null
+    $gitDir = Join-Path $cwd ".git"
+    if (Test-Path $gitDir) {
+        $dirty = & git -C $cwd status --porcelain 2>$null
         if ($dirty) {
-            $changeCount = ($dirty -split "`n" | Where-Object { $_ }).Count
-            $warnings.Add("Uncommitted changes detected ($changeCount files). Consider committing or stashing before ending session.")
+            $count = ($dirty | Measure-Object).Count
+            $warnings += "Uncommitted changes detected ($count files). Consider committing or stashing."
         }
     }
 }
 
-$tempFilter = Get-ChildItem -Path $cwd -Recurse -Depth 3 -ErrorAction SilentlyContinue |
-    Where-Object { $_.Name -match '\.tmp$|\.bak$|^debug-' -and $_.FullName -notmatch 'node_modules|\.git' }
-$totalCount = ($tempFilter | Measure-Object).Count
+# 2. Temp files check (Hunting scratchpads)
+$tempFiles = Get-ChildItem -Path $cwd -Recurse -Depth 4 -Directory:$false -ErrorAction SilentlyContinue |
+    Where-Object { 
+        $_.FullName -notmatch '[\\/]node_modules[\\/]' -and 
+        $_.FullName -notmatch '[\\/]\.git[\\/]' -and
+        ($_.Name -match '\.(tmp|bak)$' -or $_.Name -match '^(debug|scratch)-') 
+    }
 
-if ($totalCount -gt 0) {
-    $warnings.Add("Found $totalCount temp/debug artifact(s) in workspace. Clean up: *.tmp, *.bak, debug-* files.")
+if ($tempFiles) {
+    $count = @($tempFiles).Count
+    $warnings += "Found $count temp/debug artifact(s) in workspace. Clean up orphaned scratchpads: *.tmp, *.bak, debug-*, scratch-*"
 }
 
 if ($warnings.Count -eq 0) { exit 0 }
 
 $compiled = ($warnings | ForEach-Object { "- $_" }) -join "`n"
-[PSCustomObject]@{ systemMessage = $compiled } | ConvertTo-Json -Compress -Depth 3
+
+[PSCustomObject]@{ systemMessage = $compiled } | ConvertTo-Json -Compress
 exit 0

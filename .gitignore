@@ -2,3 +2,4 @@
 plans/
 .env
 .env.local
+scripts/bootstrap.sh

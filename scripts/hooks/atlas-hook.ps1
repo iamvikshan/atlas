@@ -14,13 +14,22 @@ if (-not (Test-Path $script)) {
     exit 1
 }
 
-$executor = if (Get-Command pwsh -ErrorAction SilentlyContinue) {
-    'pwsh'
-} elseif (Get-Command powershell -ErrorAction SilentlyContinue) {
-    'powershell'
-} else {
-    if ($env:OS -eq 'Windows_NT') { 'pwsh.exe' } else { 'pwsh' }
+$childPowerShell = Get-Command pwsh -CommandType Application -ErrorAction SilentlyContinue
+if (-not $childPowerShell) {
+    $childPowerShell = Get-Command powershell -CommandType Application -ErrorAction SilentlyContinue
 }
-& $executor -NonInteractive -NoProfile -File $script @args
-$ec = if ($null -ne $LASTEXITCODE) { $LASTEXITCODE } else { 1 }
-exit $ec
+
+if (-not $childPowerShell) {
+    [Console]::Error.WriteLine('atlas: PowerShell executable not found')
+    exit 1
+}
+
+$stdin = [Console]::In.ReadToEnd()
+if ($stdin) {
+    $stdin | & $childPowerShell.Path -NoLogo -NoProfile -NonInteractive -File $script @args
+} else {
+    & $childPowerShell.Path -NoLogo -NoProfile -NonInteractive -File $script @args
+}
+
+$exitCode = if ($null -ne $LASTEXITCODE) { [int]$LASTEXITCODE } else { 0 }
+exit $exitCode

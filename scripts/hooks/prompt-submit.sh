@@ -1,13 +1,12 @@
 #!/bin/bash
-# UserPromptSubmit hook: Detects Autopilot keywords (ULW, YOLO, AUTO)
-# and anti-patterns (skip tests, skip review) in user prompts. Injects
-# appropriate context to enable autonomous mode or enforce quality gates.
+# UserPromptSubmit hook: Injects strict context to prevent small-model hallucination,
+# enforces official subagents, detects Autopilot keywords (ULW, YOLO),
+# and blocks anti-patterns (skip tests, skip review).
 
 set -euo pipefail
 
 # jq is required for JSON parsing -- degrade silently if missing
 if ! command -v jq &>/dev/null; then
-  cat >/dev/null
   exit 0
 fi
 
@@ -18,38 +17,33 @@ if [[ -z "$PROMPT" ]]; then
   exit 0
 fi
 
-MESSAGE=""
+# 1. Base Reinforcement (Always injected to ground smaller models)
+# This replaces the need for the user to manually type "use tools" or "don't create agents"
+MESSAGE=$(cat <<'EOF'
+SYSTEM REINFORCEMENT: Follow your strict workflow. DO NOT hallucinate or invent custom subagents.
+ONLY delegate to the official roster: sentry, metis, oracle, killua, ekko, aurora, forge, nova, prometheus.
+Actively use your available tools to research; do not guess. Do not skip steps or lie to please.
+EOF
+)
 
-# Check for Autopilot keywords (whole words, case-insensitive)
-# Only ULW and YOLO are specific enough -- AUTO excluded to prevent false positives
-# from ordinary prompts like "add auto-save" or "auto format this"
+# 2. Check for Autopilot keywords (whole words, case-insensitive)
 if echo "$PROMPT" | grep -iqE '\b(ULW|YOLO)\b'; then
-  MESSAGE="Autopilot mode detected. Proceed autonomously without user stops. Auto-commit after **sentry** approval. Present final summary when all work is done."
+  MESSAGE="${MESSAGE}\n\nMODE OVERRIDE: Autopilot mode detected. Proceed autonomously without user stops. Auto-commit after sentry approval. Present final summary when all work is done."
 fi
 
-# Check for anti-patterns (case-insensitive)
-PROMPT_LOWER=$(echo "$PROMPT" | tr '[:upper:]' '[:lower:]')
+# 3. Check for anti-patterns (case-insensitive)
+PROMPT_LOWER=$(printf '%s' "$PROMPT" | tr '[:upper:]' '[:lower:]' | sed "s/[‘’]/'/g")
 if [[ "$PROMPT_LOWER" == *"without testing"* || \
       "$PROMPT_LOWER" == *"skip tests"* || \
       "$PROMPT_LOWER" == *"skip review"* || \
       "$PROMPT_LOWER" == *"don't test"* || \
       "$PROMPT_LOWER" == *"no tests"* || \
       "$PROMPT_LOWER" == *"just do it"* ]]; then
-  ANTI_PATTERN_MSG="WARNING: The user's prompt suggests skipping quality gates. All tests and reviews are mandatory per Core Philosophy. Proceed with full quality enforcement."
-  if [[ -n "$MESSAGE" ]]; then
-    MESSAGE="${MESSAGE}
-${ANTI_PATTERN_MSG}"
-  else
-    MESSAGE="$ANTI_PATTERN_MSG"
-  fi
+  MESSAGE="${MESSAGE}\n\nWARNING: The user's prompt suggests skipping quality gates. All tests and reviews are MANDATORY per Core Philosophy. Proceed with full quality enforcement."
 fi
 
-# If nothing detected, exit silently
-if [[ -z "$MESSAGE" ]]; then
-  exit 0
-fi
-
-MESSAGE_ESCAPED=$(printf '%s' "$MESSAGE" | jq -Rs '.')
+# Escape the combined message for valid JSON output
+MESSAGE_ESCAPED=$(printf '%b' "$MESSAGE" | jq -Rs '.')
 
 cat <<EOF
 {
