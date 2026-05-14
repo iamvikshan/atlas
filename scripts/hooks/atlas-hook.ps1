@@ -24,12 +24,7 @@ if (-not $childPowerShell) {
     exit 1
 }
 
-$stdin = [Console]::In.ReadToEnd()
-if ($stdin) {
-    $stdin | & $childPowerShell.Path -NoLogo -NoProfile -NonInteractive -File $script @args
-} else {
-    & $childPowerShell.Path -NoLogo -NoProfile -NonInteractive -File $script @args
-}
+& $childPowerShell.Path -NoLogo -NoProfile -NonInteractive -File $script @args
 
 $exitCode = if ($null -ne $LASTEXITCODE) { [int]$LASTEXITCODE } else { 0 }
 exit $exitCode

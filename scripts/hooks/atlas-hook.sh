@@ -15,6 +15,6 @@ if [[ ! -f "$SCRIPT_PATH" ]]; then
   exit 1
 fi
 
-# Use exec to replace the process, perfectly preserving stdin/stdout
+# Use exec to replace the process, preserving stdin/stdout
 shift
-exec bash "$SCRIPT_PATH" "$@"
+exec "$SCRIPT_PATH" "$@"

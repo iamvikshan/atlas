@@ -19,9 +19,7 @@ if ($transcriptPath -and (Test-Path $transcriptPath)) {
 
         $snapshot = "Context compaction imminent. Session state snapshot:`n- Messages in transcript: $msgCountText`nSave any critical state to /memories/session/ before it is lost."
     } catch {
-        $message = "pre-compact: failed to read transcript '$transcriptPath': $($_.Exception.Message)"
-        [Console]::Error.WriteLine($message)
-        Write-Verbose $message
+        [Console]::Error.WriteLine("pre-compact: failed to read transcript '$transcriptPath': $($_.Exception.Message)")
     }
 }
 
