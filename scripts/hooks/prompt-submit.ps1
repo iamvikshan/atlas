@@ -43,12 +43,6 @@ foreach ($p in $antiPatterns) {
     }
 }
 
-if (-not $qualityWarningAdded -and (
-        $promptLower -match '\bjust do it\b.{0,80}\b(without testing|skip tests|skip review|don''t test|no tests)\b' -or
-        $promptLower -match '\b(without testing|skip tests|skip review|don''t test|no tests)\b.{0,80}\bjust do it\b')) {
-    $message += "`n`nWARNING: The user's prompt suggests skipping quality gates. All tests and reviews are MANDATORY per Core Philosophy. Proceed with full quality enforcement."
-}
-
 # Output JSON payload
 [PSCustomObject]@{
     hookSpecificOutput = [PSCustomObject]@{

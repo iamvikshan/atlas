@@ -12,7 +12,7 @@ fi
 
 INPUT=$(cat)
 
-PROMPT=$(echo "$INPUT" | jq -r '.prompt // empty')
+PROMPT=$(printf '%s' "$INPUT" | jq -r '.prompt // empty')
 if [[ -z "$PROMPT" ]]; then
   exit 0
 fi
@@ -27,7 +27,7 @@ EOF
 )
 
 # 2. Check for Autopilot keywords (whole words, case-insensitive)
-if echo "$PROMPT" | grep -iqE '\b(ULW|YOLO)\b'; then
+if printf '%s\n' "$PROMPT" | grep -iqE '(^|[^[:alnum:]_])(ULW|YOLO)([^[:alnum:]_]|$)'; then
   MESSAGE="${MESSAGE}\n\nMODE OVERRIDE: Autopilot mode detected. Proceed autonomously without user stops. Auto-commit after sentry approval. Present final summary when all work is done."
 fi
 
