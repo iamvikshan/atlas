@@ -10,7 +10,7 @@ This is a VS Code agent plugin containing markdown agent instructions, shell scr
 
 ## Plan Directory
 
-`.atlas/plans/`
+`.agents/plans/`
 
 ## File Types
 

@@ -105,9 +105,9 @@ Phase: <current> of <total> | Status: <Planning | Implementing | Reviewing | Com
 
 ### 1. Initialization
 
-1. Check for `.atlas/manifest.json`. If found, load conventions and tooling.
-2. If `.atlas/manifest.json` is missing, run **killua** and **oracle** once to scan the repository, determine tech stack, linting rules, and naming conventions. Create `.atlas/manifest.json`.
-3. Check the `.atlas/plans/` directory for existing plans.
+1. Check for `.agents/manifest.json`. If found, load conventions and tooling.
+2. If `.agents/manifest.json` is missing, run **killua** and **oracle** once to scan the repository, determine tech stack, linting rules, and naming conventions. Create `.agents/manifest.json`.
+3. Check the `.agents/plans/` directory for existing plans.
 4. Create or update `/memories/session/<task>.md` to establish the ledger.
 
 ### 2. IntentGate
@@ -119,7 +119,7 @@ Phase: <current> of <total> | Status: <Planning | Implementing | Reviewing | Com
 ### 3. Metis Plan Loop
 
 Draft plan -> delegate raw task to **metis** `MODE: PRE_PLAN` (max 2 cycles) -> draft v1 -> delegate `MODE: VALIDATE` (max 2 cycles).
-Write finalized plan to `.atlas/plans/<task>-plan.md`.
+Write finalized plan to `.agents/plans/<task>-plan.md`.
 
 ### 4. Phase Implementation Loop
 
@@ -135,7 +135,7 @@ Write finalized plan to `.atlas/plans/<task>-plan.md`.
 ### 5. Commit & Archive
 
 1. Normal Mode: Ask for commit approval via #tool:vscode/askQuestions. Autopilot: Auto-commit.
-2. After all phases, move files to `.atlas/plans/archive/`.
+2. After all phases, move files to `.agents/plans/archive/`.
 3. Delete `/memories/session/<task>.md`.
 
 ---
