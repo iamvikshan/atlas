@@ -105,8 +105,8 @@ Phase: <current> of <total> | Status: <Planning | Implementing | Reviewing | Com
 
 ### 1. Initialization
 
-1. Check for `.agents/manifest.json`. If found, load conventions and tooling.
-2. If `.agents/manifest.json` is missing, run **killua** and **oracle** once to scan the repository, determine tech stack, linting rules, and naming conventions. Create `.agents/manifest.json`.
+1. Check for `.agents/atlas.json`. If found, load conventions and tooling.
+2. If `.agents/atlas.json` is missing, run **killua** and **oracle** once to scan the repository, determine tech stack, linting rules, and naming conventions. Create `.agents/atlas.json`.
 3. Check the `.agents/plans/` directory for existing plans.
 4. Create or update `/memories/session/<task>.md` to establish the ledger.
 

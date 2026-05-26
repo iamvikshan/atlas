@@ -11,9 +11,9 @@ if (-not $cwd) { exit 0 }
 $contextParts = @()
 
 # 1. Manifest Check
-$manifestPath = Join-Path $cwd ".agents\manifest.json"
+$manifestPath = Join-Path $cwd ".agents\atlas.json"
 if (-not (Test-Path $manifestPath)) {
-    $contextParts += "SYSTEM DIRECTIVE: Workspace uninitialized. .agents/manifest.json is MISSING. You MUST delegate to killua and oracle to scan the repo and generate this manifest BEFORE proceeding with the user's request."
+    $contextParts += "SYSTEM DIRECTIVE: Workspace uninitialized. .agents/atlas.json is MISSING. You MUST delegate to killua and oracle to scan the repo and generate this manifest BEFORE proceeding with the user's request."
 }
 
 # 2. Repo Memories

@@ -9,8 +9,8 @@ CWD=$(echo "$INPUT" | jq -r '.cwd // empty')
 CONTEXT_PARTS=()
 
 # -- 1. THE MANIFEST CHECK (CRITICAL) --
-if [[ ! -f "${CWD}/.agents/manifest.json" ]]; then
-  CONTEXT_PARTS+=("SYSTEM DIRECTIVE: Workspace uninitialized. .agents/manifest.json is MISSING. You MUST delegate to killua and oracle to scan the repo and generate this manifest BEFORE proceeding with the user's request.")
+if [[ ! -f "${CWD}/.agents/atlas.json" ]]; then
+  CONTEXT_PARTS+=("SYSTEM DIRECTIVE: Workspace uninitialized. .agents/atlas.json is MISSING. You MUST delegate to killua and oracle to scan the repo and generate this manifest BEFORE proceeding with the user's request.")
 fi
 
 # -- 2. Repo memories --
