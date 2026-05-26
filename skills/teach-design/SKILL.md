@@ -2,14 +2,14 @@
 name: teach-design
 description: >-
   One-time project setup that gathers design context and saves it to
-  .atlas/design.md. Run once per project to establish persistent design
+  DESIGN.md. Run once per project to establish persistent design
   guidelines used by all Atlas design skills.
 ---
 
 <!-- Adapted from pbakaus/impeccable (Apache 2.0) -- see NOTICE.md -->
 
 One-time setup skill. Run this when starting design work on a new project, or
-any time the design context in `.atlas/design.md` is missing, stale, or
+any time the design context in `DESIGN.md` is missing, stale, or
 incomplete. All Atlas design skills depend on this context to avoid generic
 AI aesthetics and produce project-specific output.
 
@@ -32,7 +32,7 @@ Inspect ALL of the following that exist -- do not stop at the first match:
    and type values in use
 6. Brand assets: `logo.*`, `favicon.*`, `public/`, `assets/` -- icon style,
    illustration style, visual language
-7. Any existing design instructions: `.atlas/design.md`,
+7. Any existing design instructions: `DESIGN.md`,
    `AGENTS.md` -- note any prior design context that
    may already be established
 
@@ -74,12 +74,12 @@ before proceeding to Step 3.
 ## Step 3: Write Design Context
 
 Synthesize your Step 1 findings and the user's Step 2 answers into a concise
-`## Design Context` section and write it to `.atlas/design.md` at the project
+`## Design Context` section and write it to `DESIGN.md` at the project
 root.
 
-- If `.atlas/design.md` does not exist: create it with the `## Design Context`
+- If `DESIGN.md` does not exist: create it with the `## Design Context`
   section as the sole content.
-- If `.atlas/design.md` already exists: replace the existing `## Design Context`
+- If `DESIGN.md` already exists: replace the existing `## Design Context`
   section in place. Do not overwrite unrelated content in the file.
 
 The section must follow this exact format:
@@ -108,7 +108,7 @@ personality. Be specific -- name a design movement, reference, or archetype.]
 **Inspired by:** [Products or styles the user named, if any]
 ```
 
-After writing `.atlas/design.md`, sync to `AGENTS.md`:
+After writing `DESIGN.md`, sync to `AGENTS.md`:
 
 - If `AGENTS.md` does NOT exist: create it and append
   the `## Design Context` block so design context is automatically active in
