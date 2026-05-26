@@ -18,7 +18,7 @@ This is the canonical context protocol for all adapted `design-*` skills.
   alone.
 - Gather context in this order:
   1. Current instructions in the active thread.
-  2. `.atlas/design.md`.
+  2. `DESIGN.md`.
   3. `teach-design` (required on cold start).
 - If required context is still missing after these steps, stop design execution
   and run `teach-design` first.

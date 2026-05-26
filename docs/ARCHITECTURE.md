@@ -234,7 +234,7 @@ To package a reusable workflow:
 
 #### Design skill family
 
-The bundled `frontend-design` skill and its `design-*` companions are adapted from [impeccable](https://github.com/pbakaus/impeccable) (Apache 2.0). They provide design guidance and the reference material used by **aurora** and **sentry** during UI work. The `/teach-design` skill gathers project-specific design context into `.atlas/design.md`.
+The bundled `frontend-design` skill and its `design-*` companions are adapted from [impeccable](https://github.com/pbakaus/impeccable) (Apache 2.0). They provide design guidance and the reference material used by **aurora** and **sentry** during UI work. The `/teach-design` skill gathers project-specific design context into `DESIGN.md`.
 
 Canonical design commands:
 

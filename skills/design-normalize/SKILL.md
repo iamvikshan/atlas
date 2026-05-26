@@ -23,7 +23,7 @@ design work.
   alone.
 - Gather context in this order:
   1. Current instructions in the active thread.
-  2. `.atlas/design.md`.
+  2. `DESIGN.md`.
   3. `teach-design` (required on cold start).
 - Stop condition: if the required context is still missing, STOP and run
   `teach-design` first. Do not continue this skill until context is
