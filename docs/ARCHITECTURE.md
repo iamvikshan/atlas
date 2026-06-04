@@ -20,23 +20,23 @@ User
 
 ### User-Facing Agents
 
-| Agent          | File                         | Model                     | Role                                                                                                                                                                                                                                             |
-| -------------- | ---------------------------- | ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| **atlas**      | `agents/atlas.agent.md`      | Claude Opus 4.6 (copilot) | Conductor. Routes tasks via IntentGate, delegates to workers directly, manages review loops, spot-checking, and todos. May apply trivial single-file quick fixes after review by **sentry**. Never writes multi-file code.                       |
-| **prometheus** | `agents/prometheus.agent.md` | Claude Opus 4.6 (copilot) | Planner. Researches requirements, consults **metis** PRE_PLAN, drafts phased plans, validates iteratively with **metis** VALIDATE, then presents the approved plan to the user for manual return to **atlas**. Never writes implementation code. |
+| Agent          | File                         | Model                | Role                                                                                                                                                                                                                                             |
+| -------------- | ---------------------------- | -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **atlas**      | `agents/atlas.agent.md`      | GPT-5 mini (copilot) | Conductor. Routes tasks via IntentGate, delegates to workers directly, manages review loops, spot-checking, and todos. May apply trivial single-file quick fixes after review by **sentry**. Never writes multi-file code.                       |
+| **prometheus** | `agents/prometheus.agent.md` | GPT-5 mini (copilot) | Planner. Researches requirements, consults **metis** PRE_PLAN, drafts phased plans, validates iteratively with **metis** VALIDATE, then presents the approved plan to the user for manual return to **atlas**. Never writes implementation code. |
 
 ### Subagents
 
-| Agent      | File                     | Model                       | Role                                                                                                         |
-| ---------- | ------------------------ | --------------------------- | ------------------------------------------------------------------------------------------------------------ |
-| **ekko**   | `agents/ekko.agent.md`   | Claude Opus 4.6 (copilot)   | Backend/core implementer. Strict TDD, Write-Guard, Comment Discipline, Indistinguishable Code.               |
-| **aurora** | `agents/aurora.agent.md` | GPT-5.4 (copilot)           | Frontend/UI implementer. TDD, accessibility-first, visual verification, stitch-mcp scaffolding.              |
-| **forge**  | `agents/forge.agent.md`  | Claude Opus 4.6 (copilot)   | DevOps/infra implementer. CI/CD, containers, cloud, monitoring, deployment automation. Security-first.       |
-| **nova**   | `agents/nova.agent.md`   | Claude Opus 4.6 (copilot)   | Data science/analytics implementer. Jupyter notebooks, log analysis, ML, visualizations. Stateful execution. |
-| **sentry** | `agents/sentry.agent.md` | GPT-5.4 (copilot)           | Code reviewer. Adversarial analysis, security, correctness, and requirement validation. Never edits code.    |
-| **oracle** | `agents/oracle.agent.md` | Claude Sonnet 4.6 (copilot) | Researcher. Structured findings, convention discovery, external docs, skills recommendations.                |
-| **killua** | `agents/killua.agent.md` | Claude Haiku 4.5 (copilot)  | Scout. Ultra-fast file discovery, dependency mapping, read-only exploration.                                 |
-| **metis**  | `agents/metis.agent.md`  | Claude Sonnet 4.6 (copilot) | Plan validator. PRE_PLAN for pre-planning analysis, VALIDATE for plan validation.                            |
+| Agent      | File                     | Model                      | Role                                                                                                         |
+| ---------- | ------------------------ | -------------------------- | ------------------------------------------------------------------------------------------------------------ |
+| **ekko**   | `agents/ekko.agent.md`   | GPT-5 mini (copilot)       | Backend/core implementer. Strict TDD, Write-Guard, Comment Discipline, Indistinguishable Code.               |
+| **aurora** | `agents/aurora.agent.md` | GPT-5 mini (copilot)       | Frontend/UI implementer. TDD, accessibility-first, visual verification, stitch-mcp scaffolding.              |
+| **forge**  | `agents/forge.agent.md`  | GPT-5 mini (copilot)       | DevOps/infra implementer. CI/CD, containers, cloud, monitoring, deployment automation. Security-first.       |
+| **nova**   | `agents/nova.agent.md`   | GPT-5 mini (copilot)       | Data science/analytics implementer. Jupyter notebooks, log analysis, ML, visualizations. Stateful execution. |
+| **sentry** | `agents/sentry.agent.md` | GPT-5 mini (copilot)       | Code reviewer. Adversarial analysis, security, correctness, and requirement validation. Never edits code.    |
+| **oracle** | `agents/oracle.agent.md` | Claude Haiku 4.5 (copilot) | Researcher. Structured findings, convention discovery, external docs, skills recommendations.                |
+| **killua** | `agents/killua.agent.md` | Claude Haiku 4.5 (copilot) | Scout. Ultra-fast file discovery, dependency mapping, read-only exploration.                                 |
+| **metis**  | `agents/metis.agent.md`  | Claude Haiku 4.5 (copilot) | Plan validator. PRE_PLAN for pre-planning analysis, VALIDATE for plan validation.                            |
 
 ### Delegation Rules
 
