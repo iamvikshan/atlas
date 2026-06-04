@@ -5,6 +5,10 @@
 > Originally forked from [bigguy345/Github-Copilot-Atlas](https://github.com/bigguy345/Github-Copilot-Atlas) which is built upon the foundation of [copilot-orchestra](https://github.com/ShepAlderson/copilot-orchestra) by ShepAlderson.
 > Naming convention slightly inspired by OmO.
 
+> [!IMPORTANT]
+>
+> For best results, please get a paid subscription and swap the models to powerful ones like Claude Opus models. atlas comes pre-configured with the Copilot free models, which are smaller and less capable. atlas has a set of tools that try to mitigate their weaknesses. See [this discussion](https://github.com/iamvikshan/atlas/discussions/6) and the [copilot subscription model](https://github.com/features/copilot/plans) for more details.
+
 ---
 
 ## Table of contents
@@ -219,4 +223,5 @@ scripts/
 ---
 
 ## Contributing
+
 Contributions are welcome! YOU MUST SEE [`CONTRIBUTING.md`](https://github.com/iamvikshan/.github/blob/main/.github/CONTRIBUTING.md) for guidelines on how to contribute to this project.
