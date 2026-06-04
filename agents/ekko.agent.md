@@ -17,15 +17,14 @@ tools:
     edit/rename,
     search,
     web,
-    'github/*',
-    'sequential-thinking/*',
     'context7/*',
     'exa/*',
     'supabase/*',
     'tavily/*',
+    'sequential-thinking/*',
     browser,
   ]
-model: Claude Opus 4.6 (copilot)
+model: GPT-5 mini (copilot)
 user-invocable: false
 ---
 

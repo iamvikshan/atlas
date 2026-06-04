@@ -17,14 +17,13 @@ tools:
     edit/rename,
     search,
     web,
-    'github/*',
     'context7/*',
     'exa/*',
     'stitch-mcp/*',
     'tavily/*',
     browser,
   ]
-model: Gemini 3.1 Pro (Preview) (copilot)
+model: GPT-5 mini (copilot)
 user-invocable: false
 ---
 

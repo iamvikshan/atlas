@@ -22,20 +22,18 @@ tools:
     edit/rename,
     search,
     web,
-    'github/*',
-    'sequential-thinking/*',
     'context7/*',
     'exa/*',
     'stitch-mcp/*',
     'supabase/*',
     'tavily/*',
+    'sequential-thinking/*',
     browser,
-    vscode.mermaid-chat-features/renderMermaidDiagram,
     todo,
   ]
 agents:
   ['sentry', 'metis', 'oracle', 'killua', 'ekko', 'aurora', 'forge', 'nova']
-model: GPT-5.4 (copilot)
+model: GPT-5 mini (copilot)
 # handoffs:
 #   - label: 'Plan with prometheus'
 #     agent: prometheus

@@ -4,22 +4,22 @@ description: 'Code reviewer -- checks security, correctness, and requirements. R
 tools:
   [
     vscode/memory,
+    vscode/resolveMemoryFileUri,
     vscode/toolSearch,
     execute/getTerminalOutput,
     execute/killTerminal,
     execute/createAndRunTask,
     execute/runInTerminal,
     read,
-    browser,
     search,
     web,
     'context7/*',
     'exa/*',
     'tavily/*',
-    'github/*',
     'sequential-thinking/*',
+    browser,
   ]
-model: GPT-5.4 (copilot)
+model: GPT-5 mini (copilot)
 user-invocable: false
 ---
 

@@ -4,15 +4,15 @@ description: 'Plan validator -- checks feasibility, scope, dependencies, and qua
 tools:
   [
     vscode/memory,
+    vscode/resolveMemoryFileUri,
     vscode/toolSearch,
     read,
     search,
     web,
-    'github/*',
-    'sequential-thinking/*',
     'context7/*',
     'exa/*',
     'tavily/*',
+    'sequential-thinking/*',
   ]
 model: GPT-5.4 mini (copilot)
 user-invocable: false

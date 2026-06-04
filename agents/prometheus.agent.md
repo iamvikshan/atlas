@@ -4,31 +4,9 @@ argument-hint: Outline the goal or problem to research
 description: 'Deep planning specialist -- researches requirements, architects solutions, and drafts phased implementation plans'
 disable-model-invocation: true
 tools:
-  [
-    vscode/memory,
-    vscode/toolSearch,
-    vscode/askQuestions,
-    execute/getTerminalOutput,
-    execute/runInTerminal,
-    read,
-    agent,
-    edit/createDirectory,
-    edit/createFile,
-    edit/editFiles,
-    edit/rename,
-    search,
-    web,
-    'github/*',
-    'sequential-thinking/*',
-    'context7/*',
-    'exa/*',
-    'tavily/*',
-    browser,
-    vscode.mermaid-chat-features/renderMermaidDiagram,
-    todo,
-  ]
+  [vscode/memory, vscode/resolveMemoryFileUri, vscode/toolSearch, vscode/askQuestions, execute/getTerminalOutput, execute/runInTerminal, read, agent, edit/createDirectory, edit/createFile, edit/editFiles, edit/rename, search, web, 'context7/*', 'exa/*', 'tavily/*', 'sequential-thinking/*', browser, todo]
 agents: ['metis', 'oracle', 'killua', 'atlas']
-model: Claude Opus 4.6 (copilot)
+model: GPT-5 mini (copilot)
 handoffs:
   - label: 'Execute plan with atlas'
     agent: atlas

@@ -4,8 +4,9 @@ description: 'DevOps and infrastructure implementation -- CI/CD, containers, clo
 tools:
   [
     vscode/memory,
-    vscode/extensions,
+    vscode/resolveMemoryFileUri,
     vscode/toolSearch,
+    vscode/extensions,
     execute/getTerminalOutput,
     execute/killTerminal,
     execute/createAndRunTask,
@@ -14,13 +15,12 @@ tools:
     edit,
     search,
     web,
-    'github/*',
-    'sequential-thinking/*',
     'context7/*',
     'exa/*',
     'tavily/*',
+    'sequential-thinking/*',
   ]
-model: Claude Opus 4.6 (copilot)
+model: GPT-5 mini (copilot)
 user-invocable: false
 ---
 
