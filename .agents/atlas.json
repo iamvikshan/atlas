@@ -1,0 +1,114 @@
+{
+  "plugin": {
+    "name": "atlas",
+    "version": "2.0.2",
+    "description": "Multi-agent orchestration system for GitHub Copilot -- planning, implementation, review, and commit through intelligent agent delegation",
+    "author": "vikshan",
+    "repository": "https://github.com/iamvikshan/atlas",
+    "license": "MIT"
+  },
+  "agents": {
+    "total": 10,
+    "definitions": [
+      "atlas",
+      "aurora",
+      "ekko",
+      "forge",
+      "killua",
+      "metis",
+      "nova",
+      "oracle",
+      "prometheus",
+      "sentry"
+    ],
+    "path": "agents/",
+    "fileType": ".agent.md"
+  },
+  "skills": {
+    "total": 25,
+    "categories": {
+      "design": [
+        "design-adapt",
+        "design-animate",
+        "design-arrange",
+        "design-audit",
+        "design-bolder",
+        "design-clarify",
+        "design-colorize",
+        "design-critique",
+        "design-extract",
+        "design-harden",
+        "design-help",
+        "design-normalize",
+        "design-onboard",
+        "design-optimize",
+        "design-overdrive",
+        "design-polish",
+        "design-quieter",
+        "design-typeset"
+      ],
+      "implementation": ["frontend-design"],
+      "infrastructure": ["postgres-patterns", "terraform-patterns"],
+      "specialized": [
+        "github-triage",
+        "security-review",
+        "teach-design",
+        "vibe-security"
+      ]
+    },
+    "path": "skills/",
+    "structure": {
+      "skill_dir": "kebab-case",
+      "primary_file": "SKILL.md",
+      "attribution_file": "NOTICE.md"
+    }
+  },
+  "hooks": {
+    "total": 6,
+    "lifecycle_events": [
+      "SessionStart",
+      "UserPromptSubmit",
+      "PreToolUse",
+      "PostToolUse",
+      "PreCompact",
+      "Stop"
+    ],
+    "scripts": {
+      "total": 10,
+      "unix": [
+        "atlas-hook.sh",
+        "check-design-command-sync.sh",
+        "check-design-protocol.sh",
+        "comment-checker.sh",
+        "pre-compact.sh",
+        "pre-tool-use.sh",
+        "prompt-submit.sh",
+        "session-start.sh",
+        "session-stop.sh",
+        "write-guard.sh"
+      ],
+      "windows": [
+        "atlas-hook.ps1",
+        "check-design-command-sync.ps1",
+        "comment-checker.ps1",
+        "pre-compact.ps1",
+        "prompt-submit.ps1",
+        "session-start.ps1",
+        "session-stop.ps1",
+        "write-guard.ps1"
+      ]
+    },
+    "path": "scripts/hooks/",
+    "config": "hooks/quality.json"
+  },
+  "languages": ["markdown", "json", "shell", "powershell"],
+  "conventions": {
+    "naming": "kebab-case",
+    "documentation": "markdown",
+    "emojis": "forbidden",
+    "frontmatter": "yaml"
+  },
+  "quality_gates": ["check-design-command-sync", "check-design-protocol"],
+  "verified_by": "oracle-review",
+  "verified_at": "2026-06-04"
+}
