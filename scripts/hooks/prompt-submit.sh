@@ -18,11 +18,11 @@ if [[ -z "$PROMPT" ]]; then
 fi
 
 # 1. Base Reinforcement (Always injected to ground smaller models)
-# This replaces the need for the user to manually type "use tools" or "don't create agents"
+# This replaces the need for the user to manually type "use tools" or "don't create agents" but use only the official subagents: sentry, metis, oracle, killua, ekko, aurora, forge, nova, prometheus.
 MESSAGE=$(cat <<'EOF'
 SYSTEM REINFORCEMENT: Follow your strict workflow. DO NOT hallucinate or invent custom subagents.
-ONLY delegate to the official roster: sentry, metis, oracle, killua, ekko, aurora, forge, nova, prometheus.
-Actively use your available tools to research; do not guess. Do not skip steps or lie to please.
+ONLY delegate to the official roster of subagents provided by the system. If a task requires a tool or capability you don't have, say you can't do it instead of making it up.
+Actively use your available tools to research; tavily, context7 and exa mcps - do not guess, nor use your built-in search tools, but the specified ones. Do not skip steps or lie to please.
 EOF
 )
 
