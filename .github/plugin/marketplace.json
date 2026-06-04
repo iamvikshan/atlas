@@ -5,14 +5,14 @@
   },
   "metadata": {
     "description": "Atlas multi-agent orchestration system for GitHub Copilot",
-    "version": "2.0.1",
+    "version": "2.0.2",
     "pluginRoot": "."
   },
   "plugins": [
     {
       "name": "atlas",
       "description": "Multi-agent orchestration system for GitHub Copilot -- planning, implementation, review, and commit through intelligent agent delegation",
-      "version": "2.0.1",
+      "version": "2.0.2",
       "author": {
         "name": "vikshan",
         "url": "https://github.com/iamvikshan"
