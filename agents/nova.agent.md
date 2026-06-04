@@ -4,6 +4,7 @@ description: 'Data Scientist and Analyst -- Jupyter notebooks, data visualizatio
 tools:
   [
     vscode/memory,
+    vscode/resolveMemoryFileUri,
     vscode/toolSearch,
     vscode/extensions,
     execute/getTerminalOutput,

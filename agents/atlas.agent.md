@@ -5,6 +5,7 @@ disable-model-invocation: true
 tools:
   [
     vscode/memory,
+    vscode/resolveMemoryFileUri,
     vscode/toolSearch,
     vscode/extensions,
     vscode/askQuestions,

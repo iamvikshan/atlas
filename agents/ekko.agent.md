@@ -4,6 +4,7 @@ description: 'Backend and core logic implementation -- APIs, data pipelines, and
 tools:
   [
     vscode/memory,
+    vscode/resolveMemoryFileUri,
     vscode/toolSearch,
     execute/getTerminalOutput,
     execute/killTerminal,

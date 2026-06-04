@@ -4,6 +4,7 @@ description: 'Deep researcher -- codebase analysis, documentation lookup, and co
 tools:
   [
     vscode/memory,
+    vscode/resolveMemoryFileUri,
     vscode/toolSearch,
     read,
     search,

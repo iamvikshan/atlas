@@ -4,6 +4,7 @@ description: 'Frontend and UI implementation -- components, styling, accessibili
 tools:
   [
     vscode/memory,
+    vscode/resolveMemoryFileUri,
     vscode/toolSearch,
     execute/getTerminalOutput,
     execute/killTerminal,
